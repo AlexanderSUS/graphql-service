@@ -19,7 +19,11 @@
   },
   "homepage": "https://github.com/AlexanderSUS/graphql-service#readme",
   "dependencies": {
-    "dotenv": "^16.0.1"
+    "apollo-datasource-rest": "^3.6.1",
+    "apollo-server": "^3.9.0",
+    "apollo-server-core": "^3.9.0",
+    "dotenv": "^16.0.1",
+    "graphql": "^16.5.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.42",
