@@ -10,7 +10,7 @@ const typeDefs = gql`
   }
 
   type Jwt {
-    jwt: String!
+    jwt: String
   }
 
   type Query {

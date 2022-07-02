@@ -9,6 +9,13 @@ const typeDefs = gql`
     year: Int
   }
 
+  input GenreInput {
+    name: String
+    description: String
+    country: String
+    year: Int
+ }
+
   type GenresList {
     items: [Genre]
     limit: Int

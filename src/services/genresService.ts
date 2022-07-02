@@ -33,7 +33,7 @@ class GenresAPI extends RESTDataSource implements GenresAPIDataSource {
   }
 
   async updateGenre(args: UpdateGenreArgs) {
-    return this.post(`${GenresAPIEndpoint.genres}/${encodeURIComponent(args._id)}`, args);
+    return this.put(`${GenresAPIEndpoint.genres}/${encodeURIComponent(args._id)}`, args);
   }
 
   async deleteGenre(id: string) {
