@@ -10,6 +10,14 @@ const typeDefs = gql`
     genres: [Genre]
   }
 
+  input BandInput {
+    name: String
+    origin: String
+    members: [MemberInput]
+    website: String
+    genres: [GenreInput]
+  }
+
   type Member {
     artist: String
     instrument: String
