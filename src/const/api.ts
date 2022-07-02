@@ -11,4 +11,5 @@ export const enum API {
 export const enum UserAPIEndpoint {
   users = 'users',
   register = 'users/register',
+  login = 'users/login',
 }

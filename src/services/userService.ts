@@ -1,10 +1,11 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
 import { API, UserAPIEndpoint } from '../const/api';
-import { RegisterUserArgs } from '../types/user';
+import { LoginArgs, RegisterUserArgs } from '../types/user';
 
 export interface UsersAPIDataSource {
   getUser: (id: string) => Promise<any>
   registerUser: (args: RegisterUserArgs) => Promise<any>
+  login: (args: LoginArgs) => Promise<any>
 }
 
 class UsersAPI extends RESTDataSource implements UsersAPIDataSource {
@@ -19,6 +20,10 @@ class UsersAPI extends RESTDataSource implements UsersAPIDataSource {
 
   async registerUser(args: RegisterUserArgs) {
     return this.post(UserAPIEndpoint.register, args);
+  }
+
+  async login(args: LoginArgs) {
+    return this.post(UserAPIEndpoint.login, args);
   }
 }
 

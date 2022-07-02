@@ -1,5 +1,5 @@
 import { Resolvers } from '../../types/resolvers';
-import { RegisterUserArgs } from '../../types/user';
+import { LoginArgs, RegisterUserArgs } from '../../types/user';
 
 const userResolver: Resolvers = {
   Query: {
@@ -11,6 +11,10 @@ const userResolver: Resolvers = {
   Mutation: {
     async register(_: any, args: RegisterUserArgs, { dataSources }) {
       return dataSources.usersAPI.registerUser(args);
+    },
+
+    async jwt(_: any, args: LoginArgs, { dataSources }) {
+      return dataSources.usersAPI.login(args);
     },
   },
 };
