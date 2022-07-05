@@ -5,6 +5,7 @@ import { UsersAPIDataSource } from '../services/userService';
 import { ArtistsAPIDataSource } from '../services/artistsService';
 import { TracksAPIDataSource } from '../services/tracksService';
 import { AlbumsAPIDataSource } from '../services/albumsService';
+import { FavouritesAPIDataSource } from '../services/favouritesService';
 
 export interface IDataSources {
   usersAPI: UsersAPIDataSource,
@@ -13,6 +14,7 @@ export interface IDataSources {
   artistsAPI: ArtistsAPIDataSource,
   tracksAPI: TracksAPIDataSource,
   albumsAPI: AlbumsAPIDataSource
+  favouritesAPI: FavouritesAPIDataSource,
 }
 
 export type Context = {

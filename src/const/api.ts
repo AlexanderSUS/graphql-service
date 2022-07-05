@@ -5,7 +5,7 @@ export const enum API {
   bands = 'http://localhost:3003/v1',
   albums = 'http://localhost:3005/v1',
   tracks = 'http://localhost:3006/v1',
-  favourites = 'http://localhost:3007/v1/favourites ',
+  favourites = 'http://localhost:3007/v1',
 }
 
 export const enum UserAPIEndpoint {
@@ -32,4 +32,9 @@ export const enum TracksAPIEndpoint {
 
 export const enum AlbumsAPIEndpoint {
   albums = 'albums',
+}
+
+export const enum FavouritesAPIEndpoint {
+  favourites = 'favourites',
+  add = 'favourites/add',
 }

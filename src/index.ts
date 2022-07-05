@@ -11,6 +11,8 @@ import tracksTypeDefs from './graphql/models/Tracks';
 import tracksResolver from './graphql/resolvers/Tracks';
 import albumTypeDefs from './graphql/models/Albums';
 import albumsResolver from './graphql/resolvers/Albums';
+import favouritesTypeDefs from './graphql/models/Favourites';
+import favouritesResolver from './graphql/resolvers/Favourites';
 import { IDataSources, MyDataSources } from './types/dataSources';
 import UsersAPI from './services/userService';
 import BandsAPI from './services/bandsService';
@@ -18,6 +20,7 @@ import GenresAPI from './services/genresService';
 import ArtistsAPI from './services/artistsService';
 import TracksAPI from './services/tracksService';
 import AlbumsAPI from './services/albumsService';
+import FavouritesAPI from './services/favouritesService';
 
 const dataSources = () => {
   const sources: IDataSources = {
@@ -27,15 +30,16 @@ const dataSources = () => {
     artistsAPI: new ArtistsAPI(),
     tracksAPI: new TracksAPI(),
     albumsAPI: new AlbumsAPI(),
+    favouritesAPI: new FavouritesAPI(),
   };
   return { ...sources } as unknown as MyDataSources;
 };
 
 const server = new ApolloServer({
   typeDefs: [userTypeDefs, genresTypeDefs, bandTypeDefs,
-    arttistsTypeDefs, tracksTypeDefs, albumTypeDefs],
+    arttistsTypeDefs, tracksTypeDefs, albumTypeDefs, favouritesTypeDefs],
   resolvers: [userResolver, genresResolver, bandResolver,
-    artistsResolver, tracksResolver, albumsResolver],
+    artistsResolver, tracksResolver, albumsResolver, favouritesResolver],
   csrfPrevention: true,
   cache: 'bounded',
   dataSources,
