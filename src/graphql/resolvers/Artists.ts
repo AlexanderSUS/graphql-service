@@ -1,7 +1,16 @@
 import { Resolvers } from '../../types/resolvers';
-import { CreateArtistArgs, UpdateArtistArgs } from '../../types/artists';
+import { Artist, CreateArtistArgs, UpdateArtistArgs } from '../../types/artists';
+import { List } from '../../types/list';
+import { Band } from '../../types/bands';
 
 const artistsResolver: Resolvers = {
+  Artist: {
+    async bands(artist: Artist, args: any, { dataSources }) {
+      const bands = await dataSources.bandsAPI.getBands() as List<Band>;
+      return artist.bandsIds.map((id) => bands.items.find((band) => band._id === id));
+    },
+  },
+
   Query: {
     async artists(_: any, args: any, { dataSources }) {
       return dataSources.artistsAPI.getArtists();
