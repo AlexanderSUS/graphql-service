@@ -1,7 +1,16 @@
 import { Resolvers } from '../../types/resolvers';
-import { CreateBandArgs, UpdateBandArgs } from '../../types/bands';
+import { Band, CreateBandArgs, UpdateBandArgs } from '../../types/bands';
+import { Genre } from '../../types/genres';
+import { List } from '../../types/list';
 
 const bandsResolver: Resolvers = {
+  Band: {
+    async genres(band: Band, args: any, { dataSources }) {
+      const genres = await dataSources.genresAPI.getGenres() as List<Genre>;
+      return band.genresIds.map((id) => genres.items.find((genre) => genre._id === id));
+    },
+  },
+
   Query: {
     async bands(_: any, args: any, { dataSources }) {
       return dataSources.bandsAPI.getBands();

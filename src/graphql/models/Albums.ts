@@ -12,16 +12,6 @@ const typeDefs = gql`
     image: String
   }
 
-  input AlbumInput {
-    name: String
-    released: Int
-    artists: [ArtistInput]
-    bands: [BandInput]
-    tracks: [TrackInput]
-    genres: [GenreInput]
-    image: String
-  }
-
   type AlbumsList {
     items: [Album]
     limit: Int
@@ -40,8 +30,8 @@ const typeDefs = gql`
   }
 
  type Mutation {
-    createAlbum(name: String, released: Int, artists: [ArtistInput], bands: [BandInput], tracks: [TrackInput], genres: [GenreInput], image: String): Album
-    updateAlbum(id: ID!, name: String, released: Int, artists: [ArtistInput], bands: [BandInput], tracks: [TrackInput], genres: [GenreInput], image: String): Album
+    createAlbum(name: String, released: Int, artists: [ID], bands: [ID], tracks: [ID], genres: [ID], image: String): Album
+    updateAlbum(id: ID!, name: String, released: Int, artists: [ID], bands: [ID], tracks: [ID], genres: [ID], image: String): Album
     deleteAlbum(_id: ID!): DeleteAlbumReturnObject
   }
 `;

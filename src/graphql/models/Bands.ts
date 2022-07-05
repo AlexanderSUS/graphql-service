@@ -10,14 +10,6 @@ const typeDefs = gql`
     genres: [Genre]
   }
 
-  input BandInput {
-    name: String
-    origin: String
-    members: [MemberInput]
-    website: String
-    genres: [GenreInput]
-  }
-
   type Member {
     artist: String
     instrument: String
@@ -48,8 +40,8 @@ const typeDefs = gql`
   }
 
  type Mutation {
-    createBand(name: String, origin: String, members: [MemberInput], website: String, genres: [GenreInput]): Band
-    updateBand(_id: ID!, name: String, origin: String, members: [MemberInput], website: String, genres: [GenreInput]): Band
+    createBand(name: String, origin: String, members: [MemberInput], website: String, genresIds: [ID]): Band
+    updateBand(_id: ID!, name: String, origin: String, members: [MemberInput], website: String, genresIds: [ID]): Band
     deleteBand(_id: ID!): DeleteBandReturnObject
  }
 `;

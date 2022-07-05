@@ -1,12 +1,24 @@
-import { UpdateGenreArgs } from './genres';
-import { Member } from './member';
+export type Member = {
+  artist: string
+  instrument: string
+  years: string
+};
+
+export type Band = {
+  _id: string,
+  name: string;
+  origin: string;
+  members: Member[];
+  website: string;
+  genresIds: string[];
+};
 
 export type CreateBandArgs = {
   name?: string;
   origin?: string;
   members?: Member[];
   website?: string;
-  genres?: UpdateBandArgs[];
+  genresIds?: string[];
 };
 
 export type UpdateBandArgs = {
@@ -15,5 +27,5 @@ export type UpdateBandArgs = {
   origin?: string;
   members?: Member[];
   website?: string;
-  genres?: UpdateGenreArgs[];
+  genresIds?: string[];
 };

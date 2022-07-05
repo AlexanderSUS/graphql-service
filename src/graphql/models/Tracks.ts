@@ -11,15 +11,6 @@ const typeDefs = gql`
     genres: [Genre]
   } 
 
-  input TrackInput {
-    title: String!
-    albums: [AlbumInput]
-    bands: [BandInput]
-    duration: Int
-    released: Int
-    genres: [GenreInput]
-  }
-
   type TracksList {
     items: [Track]
     limit: Int
@@ -38,8 +29,8 @@ const typeDefs = gql`
   }
 
  type Mutation {
-    createTrack(title: String!,  albums: [AlbumInput], bands: [BandInput], duration: Int, released: Int, genres: [GenreInput]): Track
-    updateTrack(_id: ID!, title: String!,  albums: [AlbumInput], bands: [BandInput], duration: Int, released: Int, genres: [GenreInput]): Track
+    createTrack(title: String!,  albums: [ID], bands: [ID], duration: Int, released: Int, genres: [ID]): Track
+    updateTrack(_id: ID!, title: String!,  albums: [ID], bands: [ID], duration: Int, released: Int, genres: [ID]): Track
     deleteTrack(_id: ID!): DeleteTrackReturnObject
   }
 `;
