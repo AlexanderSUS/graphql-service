@@ -2,7 +2,7 @@ import { gql } from 'apollo-server';
 
 const typeDefs = gql`
   type Track {
-    id: ID!
+    _id: ID!
     title: String!
     albums: [Album]
     bands: [Band]

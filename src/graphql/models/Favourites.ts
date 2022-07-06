@@ -2,7 +2,7 @@ import { gql } from 'apollo-server';
 
 const typeDefs = gql`
   type Favourites {
-    id: ID!
+    _id: ID!
     userId: ID
     bands: [Band]
     genres: [Genre]
