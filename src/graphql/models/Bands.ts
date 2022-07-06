@@ -11,13 +11,16 @@ const typeDefs = gql`
   }
 
   type Member {
-    artist: String
+    id: ID!
+    firstName: String
+    secondName: String
+    middleName: String
     instrument: String
     years: [String]
   }
 
   input MemberInput {
-    artist: String
+    artist: ID!
     instrument: String
     years: [String]
   }

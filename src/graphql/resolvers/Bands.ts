@@ -3,6 +3,7 @@ import { Band, CreateBandArgs, UpdateBandArgs } from '../../types/bands';
 import { Genre } from '../../types/genres';
 import { List } from '../../types/list';
 import { QueryParams } from '../../types/queryParams';
+import { Artist } from '../../types/artists';
 
 const bandsResolver: Resolvers = {
   Band: {
@@ -10,6 +11,24 @@ const bandsResolver: Resolvers = {
       const genres = await dataSources.genresAPI.getGenres() as List<Genre>;
       return band.genresIds.map((id) => genres.items.find((genre) => genre._id === id));
     },
+
+    async members(band: Band, args: any, { dataSources }) {
+      const artistsRequests = band.members.map(
+        (member) => dataSources.artistsAPI.getArtist(member.id),
+      );
+
+      const artists = await Promise.all(artistsRequests) as unknown as Promise<Artist[]>;
+
+      return (await artists).map((artist, index) => {
+        const { id, instrument, years } = band.members[index];
+        const { firstName, secondName, middleName } = artist;
+
+        return {
+          id, firstName, secondName, middleName, instrument, years,
+        };
+      });
+    },
+
   },
 
   Query: {

@@ -1,7 +1,10 @@
 export type Member = {
-  artist: string
-  instrument: string
-  years: string
+  id: string;
+  firstName?: string;
+  secondName?: string;
+  middleName?: string;
+  instrument?: string
+  years?: string
 };
 
 export type Band = {
