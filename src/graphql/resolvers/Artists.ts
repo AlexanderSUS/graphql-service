@@ -17,7 +17,7 @@ const artistsResolver: Resolvers = {
       return dataSources.artistsAPI.getArtists(queryParams);
     },
 
-    async genre(_: any, { id }: { id : string }, { dataSources }) {
+    async artist(_: any, { id }: { id : string }, { dataSources }) {
       return dataSources.artistsAPI.getArtist(id);
     },
   },
