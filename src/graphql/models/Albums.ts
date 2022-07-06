@@ -25,7 +25,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    albums: AlbumsList
+    albums(limit: Int, offset: Int): AlbumsList
     album(id: ID!): Album
   }
 

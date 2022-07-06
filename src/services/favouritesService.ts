@@ -1,8 +1,10 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, FavouritesAPIEndpoint } from '../const/api';
+import { QueryParams } from '../types/queryParams';
+import getQueryParams from '../utils/getQueryParams';
 
 export interface FavouritesAPIDataSource {
-  getFavourites: () => Promise<any>;
+  getFavourites: (queryParams?: QueryParams) => Promise<any>;
   addTrackToFavourites: (id: string) => Promise<any>;
   addBandToFavourites: (id: string) => Promise<any>;
   addArtistToFavourites: (id: string) => Promise<any> ;
@@ -19,8 +21,8 @@ class FavouritesAPI extends RESTDataSource implements FavouritesAPIDataSource {
     request.headers.set('Authorization', `Bearer ${this.context.token}`);
   }
 
-  async getFavourites() {
-    return this.get(FavouritesAPIEndpoint.favourites);
+  async getFavourites(queryParams?: QueryParams) {
+    return this.get(`${FavouritesAPIEndpoint.favourites}${getQueryParams(queryParams)}`);
   }
 
   async addTrackToFavourites(id: string) {

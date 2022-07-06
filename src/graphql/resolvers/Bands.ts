@@ -2,6 +2,7 @@ import { Resolvers } from '../../types/resolvers';
 import { Band, CreateBandArgs, UpdateBandArgs } from '../../types/bands';
 import { Genre } from '../../types/genres';
 import { List } from '../../types/list';
+import { QueryParams } from '../../types/queryParams';
 
 const bandsResolver: Resolvers = {
   Band: {
@@ -12,8 +13,8 @@ const bandsResolver: Resolvers = {
   },
 
   Query: {
-    async bands(_: any, args: any, { dataSources }) {
-      return dataSources.bandsAPI.getBands();
+    async bands(_: any, queryParams: QueryParams, { dataSources }) {
+      return dataSources.bandsAPI.getBands(queryParams);
     },
 
     async band(_: any, { id }: { id : string }, { dataSources }) {

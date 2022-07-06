@@ -1,10 +1,12 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, GenresAPIEndpoint } from '../const/api';
 import { CreateGenreArgs, UpdateGenreArgs } from '../types/genres';
+import { QueryParams } from '../types/queryParams';
+import getQueryParams from '../utils/getQueryParams';
 
 export interface GenresAPIDataSource {
   getGenre: (id: string) => Promise<any>
-  getGenres: () => Promise<any>
+  getGenres: (queryParams?: QueryParams) => Promise<any>
   createGenre: (args: CreateGenreArgs) => Promise<any>
   updateGenre: (args: UpdateGenreArgs) => Promise<any>
   deleteGenre: (id: string) => Promise<any>
@@ -20,8 +22,8 @@ class GenresAPI extends RESTDataSource implements GenresAPIDataSource {
     request.headers.set('Authorization', `Bearer ${this.context.token}`);
   }
 
-  async getGenres() {
-    return this.get(GenresAPIEndpoint.genres);
+  async getGenres(queryParams?: QueryParams) {
+    return this.get(`${GenresAPIEndpoint.genres}${getQueryParams(queryParams)}`);
   }
 
   async getGenre(id: string) {

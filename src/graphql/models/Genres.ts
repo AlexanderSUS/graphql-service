@@ -22,7 +22,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    genres: GenresList
+    genres(limit: Int, offset: Int): GenresList
     genre(id: ID!): Genre
   }
 

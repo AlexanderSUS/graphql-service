@@ -1,10 +1,11 @@
 import { Resolvers } from '../../types/resolvers';
 import { CreateGenreArgs, UpdateGenreArgs } from '../../types/genres';
+import { QueryParams } from '../../types/queryParams';
 
 const genresResolver: Resolvers = {
   Query: {
-    async genres(_: any, args: any, { dataSources }) {
-      return dataSources.genresAPI.getGenres();
+    async genres(_: any, queryParams: QueryParams, { dataSources }) {
+      return dataSources.genresAPI.getGenres(queryParams);
     },
 
     async genre(_: any, { id }: { id : string }, { dataSources }) {

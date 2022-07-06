@@ -1,10 +1,12 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, BandsAPIEndpoint } from '../const/api';
 import { CreateBandArgs, UpdateBandArgs } from '../types/bands';
+import { QueryParams } from '../types/queryParams';
+import getQueryParams from '../utils/getQueryParams';
 
 export interface BandsAPIDataSource {
   getBand: (id: string) => Promise<any>
-  getBands: () => Promise<any>
+  getBands: (queryParams?: QueryParams) => Promise<any>
   createBand: (args: CreateBandArgs) => Promise<any>
   updateBand: (args: UpdateBandArgs) => Promise<any>
   deleteBand: (id: string) => Promise<any>
@@ -20,8 +22,8 @@ class BandsAPI extends RESTDataSource implements BandsAPIDataSource {
     request.headers.set('Authorization', `Bearer ${this.context.token}`);
   }
 
-  async getBands() {
-    return this.get(BandsAPIEndpoint.bands);
+  async getBands(queryParams?: QueryParams) {
+    return this.get(`${BandsAPIEndpoint.bands}${getQueryParams(queryParams)}`);
   }
 
   async getBand(id: string) {

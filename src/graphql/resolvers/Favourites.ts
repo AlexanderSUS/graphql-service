@@ -5,6 +5,7 @@ import { Genre } from '../../types/genres';
 import { Band } from '../../types/bands';
 import { Favourites } from '../../types/favourites';
 import { Artist } from '../../types/artists';
+import { QueryParams } from '../../types/queryParams';
 
 const favouritesResolver: Resolvers = {
   Favourites: {
@@ -27,8 +28,8 @@ const favouritesResolver: Resolvers = {
   },
 
   Query: {
-    async favourites(_: any, args: any, { dataSources }) {
-      return dataSources.favouritesAPI.getFavourites();
+    async favourites(_: any, queryParams: QueryParams, { dataSources }) {
+      return dataSources.favouritesAPI.getFavourites(queryParams);
     },
   },
 

@@ -1,10 +1,12 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, ArtistsAPIEndpoint } from '../const/api';
 import { CreateArtistArgs, UpdateArtistArgs } from '../types/artists';
+import { QueryParams } from '../types/queryParams';
+import getQueryParams from '../utils/getQueryParams';
 
 export interface ArtistsAPIDataSource {
   getArtist: (id: string) => Promise<any>
-  getArtists: () => Promise<any>
+  getArtists: (queryParams?: QueryParams) => Promise<any>
   createArtist: (args: CreateArtistArgs) => Promise<any>
   updateArtist: (args: UpdateArtistArgs) => Promise<any>
   deleteArtist: (id: string) => Promise<any>
@@ -20,8 +22,8 @@ class ArtistsAPI extends RESTDataSource implements ArtistsAPIDataSource {
     request.headers.set('Authorization', `Bearer ${this.context.token}`);
   }
 
-  async getArtists() {
-    return this.get(ArtistsAPIEndpoint.artists);
+  async getArtists(queryParams?: QueryParams) {
+    return this.get(`${ArtistsAPIEndpoint.artists}${getQueryParams(queryParams)}`);
   }
 
   async getArtist(id: string) {

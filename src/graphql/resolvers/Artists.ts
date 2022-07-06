@@ -2,6 +2,7 @@ import { Resolvers } from '../../types/resolvers';
 import { Artist, CreateArtistArgs, UpdateArtistArgs } from '../../types/artists';
 import { List } from '../../types/list';
 import { Band } from '../../types/bands';
+import { QueryParams } from '../../types/queryParams';
 
 const artistsResolver: Resolvers = {
   Artist: {
@@ -12,8 +13,8 @@ const artistsResolver: Resolvers = {
   },
 
   Query: {
-    async artists(_: any, args: any, { dataSources }) {
-      return dataSources.artistsAPI.getArtists();
+    async artists(_: any, queryParams: QueryParams, { dataSources }) {
+      return dataSources.artistsAPI.getArtists(queryParams);
     },
 
     async genre(_: any, { id }: { id : string }, { dataSources }) {

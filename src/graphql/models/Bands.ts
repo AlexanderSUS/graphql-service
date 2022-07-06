@@ -35,7 +35,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    bands: BandsList
+    bands(limit: Int, offset: Int): BandsList
     band(id: ID!): Band
   }
 

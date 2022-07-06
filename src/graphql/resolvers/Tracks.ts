@@ -4,6 +4,7 @@ import { List } from '../../types/list';
 import { Genre } from '../../types/genres';
 import { Band } from '../../types/bands';
 import { Album } from '../../types/albums';
+import { QueryParams } from '../../types/queryParams';
 
 const tracksResolver: Resolvers = {
   Track: {
@@ -22,8 +23,8 @@ const tracksResolver: Resolvers = {
   },
 
   Query: {
-    async tracks(_: any, args: any, { dataSources }) {
-      return dataSources.tracksAPI.getTracks();
+    async tracks(_: any, queryParams: QueryParams, { dataSources }) {
+      return dataSources.tracksAPI.getTracks(queryParams);
     },
 
     async track(_: any, { id }: { id : string }, { dataSources }) {

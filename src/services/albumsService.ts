@@ -1,10 +1,12 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, AlbumsAPIEndpoint } from '../const/api';
 import { CreateAlbumArgs, UpdateAlbumArgs } from '../types/albums';
+import { QueryParams } from '../types/queryParams';
+import getQueryParams from '../utils/getQueryParams';
 
 export interface AlbumsAPIDataSource {
   getAlbum: (id: string) => Promise<any>
-  getAlbums: () => Promise<any>
+  getAlbums: (queryParams?: QueryParams) => Promise<any>
   createAlbum: (args: CreateAlbumArgs) => Promise<any>
   updateAlbum: (args: UpdateAlbumArgs) => Promise<any>
   deleteAlbum: (id: string) => Promise<any>
@@ -20,8 +22,8 @@ class AlbumsAPI extends RESTDataSource implements AlbumsAPIDataSource {
     request.headers.set('Authorization', `Bearer ${this.context.token}`);
   }
 
-  async getAlbums() {
-    return this.get(AlbumsAPIEndpoint.albums);
+  async getAlbums(queryParams?: QueryParams) {
+    return this.get(`${AlbumsAPIEndpoint.albums}${getQueryParams(queryParams)}`);
   }
 
   async getAlbum(id: string) {

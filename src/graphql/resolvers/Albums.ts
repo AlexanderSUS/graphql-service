@@ -5,6 +5,7 @@ import { Genre } from '../../types/genres';
 import { Artist } from '../../types/artists';
 import { List } from '../../types/list';
 import { Track } from '../../types/tracks';
+import { QueryParams } from '../../types/queryParams';
 
 const albumsResolver: Resolvers = {
   Album: {
@@ -27,8 +28,8 @@ const albumsResolver: Resolvers = {
   },
 
   Query: {
-    async albums(_: any, args: any, { dataSources }) {
-      return dataSources.albumsAPI.getAlbums();
+    async albums(_: any, queryParams: QueryParams, { dataSources }) {
+      return dataSources.albumsAPI.getAlbums(queryParams);
     },
 
     async album(_: any, { id }: { id : string }, { dataSources }) {

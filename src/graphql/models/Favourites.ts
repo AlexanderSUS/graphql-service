@@ -16,7 +16,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    favourites: Favourites
+    favourites(limit: Int, offset: Int): Favourites
   }
 
  type Mutation {
