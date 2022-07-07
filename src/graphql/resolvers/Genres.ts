@@ -22,8 +22,8 @@ const genresResolver: Resolvers = {
       return dataSources.genresAPI.updateGenre(args);
     },
 
-    async deleteGenre(_: any, { _id }: { _id : string }, { dataSources }) {
-      return dataSources.genresAPI.deleteGenre(_id);
+    async deleteGenre(_: any, { id }: { id : string }, { dataSources }) {
+      return dataSources.genresAPI.deleteGenre(id);
     },
   },
 };

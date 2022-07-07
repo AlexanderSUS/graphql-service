@@ -28,8 +28,8 @@ const typeDefs = gql`
 
   type Mutation {
     createGenre(name: String, description: String, country: String, year: Int): Genre
-    updateGenre(_id: ID!, name: String, description: String, country: String, year: Int): Genre
-    deleteGenre(_id: ID!): DeleteGenreReturnObject 
+    updateGenre(id: ID!, name: String, description: String, country: String, year: Int): Genre
+    deleteGenre(id: ID!): DeleteGenreReturnObject 
   }
 `;
 

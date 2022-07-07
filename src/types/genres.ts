@@ -6,17 +6,8 @@ export type Genre = {
   year: string;
 };
 
-export type CreateGenreArgs = {
-  name: string;
-  description?: string;
-  country?: string;
-  year?: string;
-};
+export type CreateGenreArgs = Partial<Omit<Genre, '_id'>>;
 
-export type UpdateGenreArgs = {
-  _id: string;
-  name?: string;
-  description?: string;
-  country?: string;
-  year?: string;
+export type UpdateGenreArgs = CreateGenreArgs & {
+  id: string;
 };
