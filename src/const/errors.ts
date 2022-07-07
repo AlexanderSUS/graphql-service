@@ -4,6 +4,7 @@ const enum InputError {
   badBandId = 'Bad input, check band ID',
   badGenreId = 'Bad input, check genre ID',
   badTrackId = 'Bad input, check track ID',
+  badUserId = 'Band input, ckeck user ID',
 }
 
 export default InputError;
