@@ -3,6 +3,7 @@ import { Resolvers } from '../../types/resolvers';
 import { Band, CreateBandArgs, UpdateBandArgs } from '../../types/bands';
 import { QueryParams } from '../../types/queryParams';
 import InputError from '../../const/errors';
+import { Artist } from '../../types/artists';
 
 const bandsResolver: Resolvers = {
   Band: {
@@ -16,13 +17,13 @@ const bandsResolver: Resolvers = {
       return (
         await Promise.all(
           members.map(
-            async (member) => dataSources.artistsAPI.getArtist(member.artist),
+            async (member) => dataSources.artistsAPI.getArtist(member.artist) as Promise<Artist[]>,
           ),
         )
       ).map((artist, index) => ({
         ...artist,
         instrument: members[index].instrument,
-        yeaes: members[index].years,
+        years: members[index].years,
       }));
     },
   },
@@ -48,6 +49,8 @@ const bandsResolver: Resolvers = {
 
     async updateBand(_: any, args: UpdateBandArgs, { dataSources }) {
       const band = await dataSources.bandsAPI.updateBand(args) as Band;
+
+      console.log(band.members);
 
       if (!band._id) throw new UserInputError(InputError.badBandId);
 

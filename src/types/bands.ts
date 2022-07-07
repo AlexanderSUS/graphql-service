@@ -4,13 +4,13 @@ export type Member = {
   secondName: string;
   middleName: string;
   instrument: string
-  years:string[];
+  years: string[];
 };
 
 export type MemberInput = {
-  artist: string
-  instrument: string
-  years: string
+  artist: string;
+  instrument: string;
+  years: string[];
 };
 
 export type Band = {
