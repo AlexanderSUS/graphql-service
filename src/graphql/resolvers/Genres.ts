@@ -1,6 +1,8 @@
+import { UserInputError } from 'apollo-server-core';
 import { Resolvers } from '../../types/resolvers';
-import { CreateGenreArgs, UpdateGenreArgs } from '../../types/genres';
+import { CreateGenreArgs, Genre, UpdateGenreArgs } from '../../types/genres';
 import { QueryParams } from '../../types/queryParams';
+import InputError from '../../const/errors';
 
 const genresResolver: Resolvers = {
   Query: {
@@ -9,7 +11,11 @@ const genresResolver: Resolvers = {
     },
 
     async genre(_: any, { id }: { id : string }, { dataSources }) {
-      return dataSources.genresAPI.getGenre(id);
+      const genre = await dataSources.genresAPI.getGenre(id) as Genre;
+
+      if (!genre._id) throw new UserInputError(InputError.badGenreId);
+
+      return genre;
     },
   },
 
@@ -19,7 +25,11 @@ const genresResolver: Resolvers = {
     },
 
     async updateGenre(_: any, args: UpdateGenreArgs, { dataSources }) {
-      return dataSources.genresAPI.updateGenre(args);
+      const genre = await dataSources.genresAPI.updateGenre(args) as Genre;
+
+      if (!genre._id) throw new UserInputError(InputError.badGenreId);
+
+      return genre;
     },
 
     async deleteGenre(_: any, { id }: { id : string }, { dataSources }) {

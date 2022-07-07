@@ -1,3 +1,4 @@
+import { UserInputError } from 'apollo-server-core';
 import { Resolvers } from '../../types/resolvers';
 import { Album, CreateAlbumArgs, UpdateAlbumArgs } from '../../types/albums';
 import { Band } from '../../types/bands';
@@ -6,47 +7,63 @@ import { Artist } from '../../types/artists';
 import { List } from '../../types/list';
 import { Track } from '../../types/tracks';
 import { QueryParams } from '../../types/queryParams';
+import InputError from '../../const/errors';
 
 const albumsResolver: Resolvers = {
   Album: {
     async artists(album: Album, args: any, { dataSources }) {
       const artists = await dataSources.artistsAPI.getArtists() as List<Artist>;
+
       return album.artistsIds.map((id) => artists.items.find((artist) => artist._id === id));
     },
+
     async genres(album: Album, args: any, { dataSources }) {
       const genres = await dataSources.genresAPI.getGenres() as List<Genre>;
+
       return album.genresIds.map((id) => genres.items.find((genre) => genre._id === id));
     },
+
     async bands(album: Album, args: any, { dataSources }) {
       const bands = await dataSources.bandsAPI.getBands() as List<Band>;
+
       return album.bandsIds.map((id) => bands.items.find((band) => band._id === id));
     },
+
     async tracks(album: Album, args: any, { dataSources }) {
       const tracks = await dataSources.tracksAPI.getTracks() as List<Track>;
+
       return album.trackIds.map((id) => tracks.items.find((track) => track._id === id));
     },
   },
 
   Query: {
-    async albums(_: any, queryParams: QueryParams, { dataSources }) {
+    albums(_: any, queryParams: QueryParams, { dataSources }) {
       return dataSources.albumsAPI.getAlbums(queryParams);
     },
 
     async album(_: any, { id }: { id : string }, { dataSources }) {
-      return dataSources.albumsAPI.getAlbum(id);
+      const album = await dataSources.albumsAPI.getAlbum(id) as Album;
+
+      if (!album._id) throw new UserInputError(InputError.badAlbumId);
+
+      return album;
     },
   },
 
   Mutation: {
-    async createAlbum(_: any, args: CreateAlbumArgs, { dataSources }) {
+    createAlbum(_: any, args: CreateAlbumArgs, { dataSources }) {
       return dataSources.albumsAPI.createAlbum(args);
     },
 
     async updateAlbum(_: any, args: UpdateAlbumArgs, { dataSources }) {
-      return dataSources.albumsAPI.updateAlbum(args);
+      const album = await dataSources.albumsAPI.updateAlbum(args);
+
+      if (!album._id) throw new UserInputError(InputError.badAlbumId);
+
+      return album;
     },
 
-    async deleteAlbum(_: any, { id }: { id : string }, { dataSources }) {
+    deleteAlbum(_: any, { id }: { id : string }, { dataSources }) {
       return dataSources.albumsAPI.deleteAlbum(id);
     },
   },

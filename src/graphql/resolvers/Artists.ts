@@ -4,6 +4,7 @@ import { Artist, CreateArtistArgs, UpdateArtistArgs } from '../../types/artists'
 import { List } from '../../types/list';
 import { Band } from '../../types/bands';
 import { QueryParams } from '../../types/queryParams';
+import InputError from '../../const/errors';
 
 const artistsResolver: Resolvers = {
   Artist: {
@@ -19,8 +20,12 @@ const artistsResolver: Resolvers = {
       return dataSources.artistsAPI.getArtists(queryParams);
     },
 
-    artist(_: any, { id }: { id : string }, { dataSources }) {
-      return dataSources.artistsAPI.getArtist(id);
+    async artist(_: any, { id }: { id : string }, { dataSources }) {
+      const artist = await dataSources.artistsAPI.getArtist(id) as Artist;
+
+      if (!artist._id) throw new UserInputError(InputError.badArtitsId);
+
+      return artist;
     },
   },
 
@@ -32,7 +37,7 @@ const artistsResolver: Resolvers = {
     async updateArtist(_: any, args: UpdateArtistArgs, { dataSources }) {
       const artist = await dataSources.artistsAPI.updateArtist(args) as Artist;
 
-      if (!artist._id) throw new UserInputError('Bad input, check Ids');
+      if (!artist._id) throw new UserInputError(InputError.badArtitsId);
 
       return artist;
     },
