@@ -44,8 +44,8 @@ const typeDefs = gql`
 
  type Mutation {
     createBand(name: String, origin: String, members: [MemberInput], website: String, genresIds: [ID]): Band
-    updateBand(_id: ID!, name: String, origin: String, members: [MemberInput], website: String, genresIds: [ID]): Band
-    deleteBand(_id: ID!): DeleteBandReturnObject
+    updateBand(id: ID!, name: String, origin: String, members: [MemberInput], website: String, genresIds: [ID]): Band
+    deleteBand(id: ID!): DeleteBandReturnObject
  }
 `;
 

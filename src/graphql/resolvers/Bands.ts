@@ -58,8 +58,8 @@ const bandsResolver: Resolvers = {
       return band;
     },
 
-    deleteBand(_: any, { _id }: { _id : string }, { dataSources }) {
-      return dataSources.bandsAPI.deleteBand(_id);
+    deleteBand(_: any, { id }: { id : string }, { dataSources }) {
+      return dataSources.bandsAPI.deleteBand(id);
     },
   },
 };
