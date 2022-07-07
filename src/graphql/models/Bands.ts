@@ -11,7 +11,7 @@ const typeDefs = gql`
   }
 
   type Member {
-    id: ID!
+    _id: ID!
     firstName: String
     secondName: String
     middleName: String

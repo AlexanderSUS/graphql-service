@@ -4,7 +4,6 @@ import { Band, CreateBandArgs, UpdateBandArgs } from '../../types/bands';
 import { Genre } from '../../types/genres';
 import { List } from '../../types/list';
 import { QueryParams } from '../../types/queryParams';
-import { Artist } from '../../types/artists';
 import InputError from '../../const/errors';
 
 const bandsResolver: Resolvers = {
@@ -16,24 +15,20 @@ const bandsResolver: Resolvers = {
     },
 
     async members(band: Band, args: any, { dataSources }) {
-      const artistsRequests = band.members.map(
-        (member) => dataSources.artistsAPI.getArtist(member.id),
-      );
+      const { members } = band;
 
-      const artists = await Promise.all(artistsRequests) as unknown as Promise<Artist[]>;
-
-      const resolvedMember = (await artists).map((artist, index) => {
-        const { id, instrument, years } = band.members[index];
-        const { firstName, secondName, middleName } = artist;
-
-        return {
-          id, firstName, secondName, middleName, instrument, years,
-        };
-      });
-
-      return resolvedMember;
+      return (
+        await Promise.all(
+          members.map(
+            async (member) => dataSources.artistsAPI.getArtist(member.artist),
+          ),
+        )
+      ).map((artist, index) => ({
+        ...artist,
+        instrument: members[index].instrument,
+        yeaes: members[index].years,
+      }));
     },
-
   },
 
   Query: {

@@ -35,7 +35,7 @@ class BandsAPI extends RESTDataSource implements BandsAPIDataSource {
   }
 
   async updateBand(args: UpdateBandArgs) {
-    return this.put(`${BandsAPIEndpoint.bands}/${encodeURIComponent(args._id)}`, args);
+    return this.put(`${BandsAPIEndpoint.bands}/${encodeURIComponent(args.id)}`, args);
   }
 
   async deleteBand(id: string) {
