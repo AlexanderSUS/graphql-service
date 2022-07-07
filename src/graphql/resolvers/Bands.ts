@@ -1,17 +1,13 @@
 import { UserInputError } from 'apollo-server-core';
 import { Resolvers } from '../../types/resolvers';
 import { Band, CreateBandArgs, UpdateBandArgs } from '../../types/bands';
-import { Genre } from '../../types/genres';
-import { List } from '../../types/list';
 import { QueryParams } from '../../types/queryParams';
 import InputError from '../../const/errors';
 
 const bandsResolver: Resolvers = {
   Band: {
     async genres(band: Band, args: any, { dataSources }) {
-      const genres = await dataSources.genresAPI.getGenres() as List<Genre>;
-
-      return band.genresIds.map((id) => genres.items.find((genre) => genre._id === id));
+      return Promise.all(band.genresIds.map((genreId) => dataSources.genresAPI.getGenre(genreId)));
     },
 
     async members(band: Band, args: any, { dataSources }) {
