@@ -35,7 +35,7 @@ class TracksAPI extends RESTDataSource implements TracksAPIDataSource {
   }
 
   async updateTrack(args: UpdateTrackArgs) {
-    return this.put(`${TracksAPIEndpoint.tracks}/${encodeURIComponent(args._id)}`, args);
+    return this.put(`${TracksAPIEndpoint.tracks}/${encodeURIComponent(args.id)}`, args);
   }
 
   async deleteTrack(id: string) {

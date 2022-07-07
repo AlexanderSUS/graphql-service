@@ -56,8 +56,8 @@ const tracksResolver: Resolvers = {
       return track;
     },
 
-    deleteTrack(_: any, { _id }: { _id : string }, { dataSources }) {
-      return dataSources.tracksAPI.deleteTrack(_id);
+    deleteTrack(_: any, { id }: { id : string }, { dataSources }) {
+      return dataSources.tracksAPI.deleteTrack(id);
     },
   },
 };
