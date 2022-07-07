@@ -19,7 +19,7 @@ class GenresAPI extends RESTDataSource implements GenresAPIDataSource {
   }
 
   willSendRequest(request: RequestOptions) {
-    request.headers.set('Authorization', `Bearer ${this.context.token}`);
+    request.headers.set('Authorization', this.context.token);
   }
 
   async getGenres(queryParams?: QueryParams) {

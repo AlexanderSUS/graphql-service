@@ -18,7 +18,7 @@ class FavouritesAPI extends RESTDataSource implements FavouritesAPIDataSource {
   }
 
   willSendRequest(request: RequestOptions) {
-    request.headers.set('Authorization', `Bearer ${this.context.token}`);
+    request.headers.set('Authorization', this.context.token);
   }
 
   async getFavourites(queryParams?: QueryParams) {

@@ -19,7 +19,7 @@ class AlbumsAPI extends RESTDataSource implements AlbumsAPIDataSource {
   }
 
   willSendRequest(request: RequestOptions) {
-    request.headers.set('Authorization', `Bearer ${this.context.token}`);
+    request.headers.set('Authorization', this.context.token);
   }
 
   async getAlbums(queryParams?: QueryParams) {

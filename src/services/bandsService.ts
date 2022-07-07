@@ -19,7 +19,7 @@ class BandsAPI extends RESTDataSource implements BandsAPIDataSource {
   }
 
   willSendRequest(request: RequestOptions) {
-    request.headers.set('Authorization', `Bearer ${this.context.token}`);
+    request.headers.set('Authorization', this.context.token);
   }
 
   async getBands(queryParams?: QueryParams) {
