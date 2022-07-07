@@ -46,8 +46,8 @@ const albumsResolver: Resolvers = {
       return dataSources.albumsAPI.updateAlbum(args);
     },
 
-    async deleteAlbum(_: any, { _id }: { _id : string }, { dataSources }) {
-      return dataSources.albumsAPI.deleteAlbum(_id);
+    async deleteAlbum(_: any, { id }: { id : string }, { dataSources }) {
+      return dataSources.albumsAPI.deleteAlbum(id);
     },
   },
 };

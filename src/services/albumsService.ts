@@ -35,7 +35,7 @@ class AlbumsAPI extends RESTDataSource implements AlbumsAPIDataSource {
   }
 
   async updateAlbum(args: UpdateAlbumArgs) {
-    return this.put(`${AlbumsAPIEndpoint.albums}/${encodeURIComponent(args._id)}`, args);
+    return this.put(`${AlbumsAPIEndpoint.albums}/${encodeURIComponent(args.id)}`, args);
   }
 
   async deleteAlbum(id: string) {
