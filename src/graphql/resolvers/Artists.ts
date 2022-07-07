@@ -31,8 +31,8 @@ const artistsResolver: Resolvers = {
       return dataSources.artistsAPI.updateArtist(args);
     },
 
-    async deleteArtist(_: any, { _id }: { _id : string }, { dataSources }) {
-      return dataSources.artistsAPI.deleteArtist(_id);
+    async deleteArtist(_: any, { id }: { id : string }, { dataSources }) {
+      return dataSources.artistsAPI.deleteArtist(id);
     },
   },
 };

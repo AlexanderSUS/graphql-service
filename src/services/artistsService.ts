@@ -35,7 +35,7 @@ class ArtistsAPI extends RESTDataSource implements ArtistsAPIDataSource {
   }
 
   async updateArtist(args: UpdateArtistArgs) {
-    return this.put(`${ArtistsAPIEndpoint.artists}/${encodeURIComponent(args._id)}`, args);
+    return this.put(`${ArtistsAPIEndpoint.artists}/${encodeURIComponent(args.id)}`, args);
   }
 
   async deleteArtist(id: string) {

@@ -32,8 +32,8 @@ const typeDefs = gql`
 
   type Mutation {
     createArtist(firstName: String, secondName: String, middleName: String, birthDate: String, birthPlace: String, country: String, bands: [ID], instruments: [String]): Artist
-    updateArtist(_id: ID!, firstName: String, secondName: String, middleName: String, birthDate: String, birthPlace: String, country: String, bands: [ID], instruments: String): Artist
-    deleteArtist(_id: ID!): DeleteArtistReturnObject 
+    updateArtist(id: ID!, firstName: String, secondName: String, middleName: String, birthDate: String, birthPlace: String, country: String, bands: [ID], instruments: [String]): Artist
+    deleteArtist(id: ID!): DeleteArtistReturnObject 
   }
 `;
 
