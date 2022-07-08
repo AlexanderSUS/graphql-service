@@ -6,7 +6,7 @@ import InputError from '../../const/errors';
 
 const genresResolver: Resolvers = {
   Query: {
-    async genres(_: any, queryParams: QueryParams, { dataSources }) {
+    genres(_: any, queryParams: QueryParams, { dataSources }) {
       return dataSources.genresAPI.getGenres(queryParams);
     },
 
@@ -20,7 +20,7 @@ const genresResolver: Resolvers = {
   },
 
   Mutation: {
-    async createGenre(_: any, args: CreateGenreArgs, { dataSources }) {
+    createGenre(_: any, args: CreateGenreArgs, { dataSources }) {
       return dataSources.genresAPI.createGenre(args);
     },
 
@@ -32,7 +32,7 @@ const genresResolver: Resolvers = {
       return genre;
     },
 
-    async deleteGenre(_: any, { id }: { id : string }, { dataSources }) {
+    deleteGenre(_: any, { id }: { id : string }, { dataSources }) {
       return dataSources.genresAPI.deleteGenre(id);
     },
   },

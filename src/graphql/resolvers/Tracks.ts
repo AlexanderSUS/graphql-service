@@ -19,9 +19,6 @@ const tracksResolver: Resolvers = {
     },
 
     album(track: Track, args: any, { dataSources }) {
-      console.log('In Track album resolver, track: ');
-      console.log(track);
-
       return dataSources.albumsAPI.getAlbum(track.albumId);
     },
 

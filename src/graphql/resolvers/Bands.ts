@@ -7,7 +7,7 @@ import { Artist } from '../../types/artists';
 
 const bandsResolver: Resolvers = {
   Band: {
-    async genres(band: Band, args: any, { dataSources }) {
+    genres(band: Band, args: any, { dataSources }) {
       return Promise.all(band.genresIds.map((genreId) => dataSources.genresAPI.getGenre(genreId)));
     },
 
@@ -49,8 +49,6 @@ const bandsResolver: Resolvers = {
 
     async updateBand(_: any, args: UpdateBandArgs, { dataSources }) {
       const band = await dataSources.bandsAPI.updateBand(args) as Band;
-
-      console.log(band.members);
 
       if (!band._id) throw new UserInputError(InputError.badBandId);
 
