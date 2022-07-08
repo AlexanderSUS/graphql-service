@@ -22,23 +22,23 @@ class TracksAPI extends RESTDataSource implements TracksAPIDataSource {
     request.headers.set('Authorization', this.context.token);
   }
 
-  async getTracks(queryParams?: QueryParams) {
+  getTracks(queryParams?: QueryParams) {
     return this.get(`${TracksAPIEndpoint.tracks}${getQueryParams(queryParams)}`);
   }
 
-  async getTrack(id: string) {
+  getTrack(id: string) {
     return this.get(`${TracksAPIEndpoint.tracks}/${encodeURIComponent(id)}`);
   }
 
-  async createTrack(args: CreateTrackArgs) {
+  createTrack(args: CreateTrackArgs) {
     return this.post(TracksAPIEndpoint.tracks, args);
   }
 
-  async updateTrack(args: UpdateTrackArgs) {
+  updateTrack(args: UpdateTrackArgs) {
     return this.put(`${TracksAPIEndpoint.tracks}/${encodeURIComponent(args.id)}`, args);
   }
 
-  async deleteTrack(id: string) {
+  deleteTrack(id: string) {
     return this.delete(`${TracksAPIEndpoint.tracks}/${encodeURIComponent(id)}`);
   }
 }

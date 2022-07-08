@@ -1,31 +1,34 @@
 import { UserInputError } from 'apollo-server-core';
 import { Resolvers } from '../../types/resolvers';
 import { CreateTrackArgs, Track, UpdateTrackArgs } from '../../types/tracks';
-import { List } from '../../types/list';
-import { Genre } from '../../types/genres';
-import { Band } from '../../types/bands';
-import { Album } from '../../types/albums';
 import { QueryParams } from '../../types/queryParams';
 import InputError from '../../const/errors';
 
 const tracksResolver: Resolvers = {
   Track: {
-    async genres(track: Track, args: any, { dataSources }) {
-      const genres = await dataSources.genresAPI.getGenres() as List<Genre>;
-
-      return track.genresIds.map((id) => genres.items.find((genre) => genre._id === id));
+    genres(track: Track, args: any, { dataSources }) {
+      return Promise.all(
+        track.genresIds.map((genreId) => dataSources.genresAPI.getGenre(genreId)),
+      );
     },
 
-    async bands(track: Track, args: any, { dataSources }) {
-      const bands = await dataSources.bandsAPI.getBands() as List<Band>;
-
-      return track.bandsIds.map((id) => bands.items.find((band) => band._id === id));
+    bands(track: Track, args: any, { dataSources }) {
+      return Promise.all(
+        track.bandsIds.map((bandsId) => dataSources.bandsAPI.getBand(bandsId)),
+      );
     },
 
-    async albums(track: Track, args: any, { dataSources }) {
-      const albums = await dataSources.albumsAPI.getAlbums() as List<Album>;
+    album(track: Track, args: any, { dataSources }) {
+      console.log('In Track album resolver, track: ');
+      console.log(track);
 
-      return track.bandsIds.map((id) => albums.items.find((band) => band._id === id));
+      return dataSources.albumsAPI.getAlbum(track.albumId);
+    },
+
+    artists(track: Track, args: any, { dataSources }) {
+      return Promise.all(
+        track.artistsIds.map((artistId) => dataSources.artistsAPI.getArtist(artistId)),
+      );
     },
   },
 
