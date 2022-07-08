@@ -26,7 +26,7 @@ class FavouritesAPI extends RESTDataSource implements FavouritesAPIDataSource {
   }
 
   async addTrackToFavourites(id: string) {
-    return this.post(FavouritesAPIEndpoint.add, { type: 'tracks', id });
+    return this.put(FavouritesAPIEndpoint.add, { type: 'tracks', id });
   }
 
   async addBandToFavourites(id: string) {
@@ -34,11 +34,11 @@ class FavouritesAPI extends RESTDataSource implements FavouritesAPIDataSource {
   }
 
   async addArtistToFavourites(id: string) {
-    return this.post(FavouritesAPIEndpoint.add, { type: 'artists', id });
+    return this.put(FavouritesAPIEndpoint.add, { type: 'artists', id });
   }
 
   async addGenreToFavourites(id: string) {
-    return this.post(FavouritesAPIEndpoint.add, { type: 'genres', id });
+    return this.put(FavouritesAPIEndpoint.add, { type: 'genres', id });
   }
 }
 
