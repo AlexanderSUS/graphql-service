@@ -1,14 +1,15 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, FavouritesAPIEndpoint } from '../const/api';
+import { Favourites } from '../types/favourites';
 import { QueryParams } from '../types/queryParams';
 import getQueryParams from '../utils/getQueryParams';
 
 export interface FavouritesAPIDataSource {
-  getFavourites: (queryParams?: QueryParams) => Promise<any>;
-  addTrackToFavourites: (id: string) => Promise<any>;
-  addBandToFavourites: (id: string) => Promise<any>;
-  addArtistToFavourites: (id: string) => Promise<any> ;
-  addGenreToFavourites: (id: string) => Promise<any>;
+  getFavourites: (queryParams?: QueryParams) => Promise<Favourites>;
+  addTrackToFavourites: (id: string) => Promise<Favourites>;
+  addBandToFavourites: (id: string) => Promise<Favourites>;
+  addArtistToFavourites: (id: string) => Promise<Favourites> ;
+  addGenreToFavourites: (id: string) => Promise<Favourites>;
 }
 
 class FavouritesAPI extends RESTDataSource implements FavouritesAPIDataSource {
@@ -21,24 +22,24 @@ class FavouritesAPI extends RESTDataSource implements FavouritesAPIDataSource {
     request.headers.set('Authorization', this.context.token);
   }
 
-  async getFavourites(queryParams?: QueryParams) {
-    return this.get(`${FavouritesAPIEndpoint.favourites}${getQueryParams(queryParams)}`);
+  getFavourites(queryParams?: QueryParams) {
+    return this.get<Favourites>(`${FavouritesAPIEndpoint.favourites}${getQueryParams(queryParams)}`);
   }
 
-  async addTrackToFavourites(id: string) {
-    return this.put(FavouritesAPIEndpoint.add, { type: 'tracks', id });
+  addTrackToFavourites(id: string) {
+    return this.put<Favourites>(FavouritesAPIEndpoint.add, { type: 'tracks', id });
   }
 
-  async addBandToFavourites(id: string) {
-    return this.put(FavouritesAPIEndpoint.add, { type: 'bands', id });
+  addBandToFavourites(id: string) {
+    return this.put<Favourites>(FavouritesAPIEndpoint.add, { type: 'bands', id });
   }
 
-  async addArtistToFavourites(id: string) {
-    return this.put(FavouritesAPIEndpoint.add, { type: 'artists', id });
+  addArtistToFavourites(id: string) {
+    return this.put<Favourites>(FavouritesAPIEndpoint.add, { type: 'artists', id });
   }
 
-  async addGenreToFavourites(id: string) {
-    return this.put(FavouritesAPIEndpoint.add, { type: 'genres', id });
+  addGenreToFavourites(id: string) {
+    return this.put<Favourites>(FavouritesAPIEndpoint.add, { type: 'genres', id });
   }
 }
 

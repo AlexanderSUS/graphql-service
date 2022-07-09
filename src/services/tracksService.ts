@@ -1,15 +1,17 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, TracksAPIEndpoint } from '../const/api';
+import { DeleteResponse } from '../types/deleteResponse';
+import { List } from '../types/list';
 import { QueryParams } from '../types/queryParams';
-import { CreateTrackArgs, UpdateTrackArgs } from '../types/tracks';
+import { CreateTrackArgs, Track, UpdateTrackArgs } from '../types/tracks';
 import getQueryParams from '../utils/getQueryParams';
 
 export interface TracksAPIDataSource {
-  getTrack: (id: string) => Promise<any>
-  getTracks: (queryParams?: QueryParams) => Promise<any>
-  createTrack: (args: CreateTrackArgs) => Promise<any>
-  updateTrack: (args: UpdateTrackArgs) => Promise<any>
-  deleteTrack: (id: string) => Promise<any>
+  getTrack: (id: string) => Promise<Track>
+  getTracks: (queryParams?: QueryParams) => Promise<List<Track>>
+  createTrack: (args: CreateTrackArgs) => Promise<Track>
+  updateTrack: (args: UpdateTrackArgs) => Promise<Track>
+  deleteTrack: (id: string) => Promise<DeleteResponse>
 }
 
 class TracksAPI extends RESTDataSource implements TracksAPIDataSource {
@@ -23,23 +25,23 @@ class TracksAPI extends RESTDataSource implements TracksAPIDataSource {
   }
 
   getTracks(queryParams?: QueryParams) {
-    return this.get(`${TracksAPIEndpoint.tracks}${getQueryParams(queryParams)}`);
+    return this.get<List<Track>>(`${TracksAPIEndpoint.tracks}${getQueryParams(queryParams)}`);
   }
 
   getTrack(id: string) {
-    return this.get(`${TracksAPIEndpoint.tracks}/${encodeURIComponent(id)}`);
+    return this.get<Track>(`${TracksAPIEndpoint.tracks}/${encodeURIComponent(id)}`);
   }
 
   createTrack(args: CreateTrackArgs) {
-    return this.post(TracksAPIEndpoint.tracks, args);
+    return this.post<Track>(TracksAPIEndpoint.tracks, args);
   }
 
   updateTrack(args: UpdateTrackArgs) {
-    return this.put(`${TracksAPIEndpoint.tracks}/${encodeURIComponent(args.id)}`, args);
+    return this.put<Track>(`${TracksAPIEndpoint.tracks}/${encodeURIComponent(args.id)}`, args);
   }
 
   deleteTrack(id: string) {
-    return this.delete(`${TracksAPIEndpoint.tracks}/${encodeURIComponent(id)}`);
+    return this.delete<DeleteResponse>(`${TracksAPIEndpoint.tracks}/${encodeURIComponent(id)}`);
   }
 }
 

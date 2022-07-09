@@ -1,15 +1,17 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, ArtistsAPIEndpoint } from '../const/api';
-import { CreateArtistArgs, UpdateArtistArgs } from '../types/artists';
+import { Artist, CreateArtistArgs, UpdateArtistArgs } from '../types/artists';
+import { DeleteResponse } from '../types/deleteResponse';
+import { List } from '../types/list';
 import { QueryParams } from '../types/queryParams';
 import getQueryParams from '../utils/getQueryParams';
 
 export interface ArtistsAPIDataSource {
-  getArtist: (id: string) => Promise<any>
-  getArtists: (queryParams?: QueryParams) => Promise<any>
-  createArtist: (args: CreateArtistArgs) => Promise<any>
-  updateArtist: (args: UpdateArtistArgs) => Promise<any>
-  deleteArtist: (id: string) => Promise<any>
+  getArtist: (id: string) => Promise<Artist>
+  getArtists: (queryParams?: QueryParams) => Promise<List<Artist>>
+  createArtist: (args: CreateArtistArgs) => Promise<Artist>
+  updateArtist: (args: UpdateArtistArgs) => Promise<Artist>
+  deleteArtist: (id: string) => Promise<DeleteResponse>
 }
 
 class ArtistsAPI extends RESTDataSource implements ArtistsAPIDataSource {
@@ -22,24 +24,24 @@ class ArtistsAPI extends RESTDataSource implements ArtistsAPIDataSource {
     request.headers.set('Authorization', this.context.token);
   }
 
-  async getArtists(queryParams?: QueryParams) {
-    return this.get(`${ArtistsAPIEndpoint.artists}${getQueryParams(queryParams)}`);
+  getArtists(queryParams?: QueryParams) {
+    return this.get<List<Artist>>(`${ArtistsAPIEndpoint.artists}${getQueryParams(queryParams)}`);
   }
 
-  async getArtist(id: string) {
-    return this.get(`${ArtistsAPIEndpoint.artists}/${encodeURIComponent(id)}`);
+  getArtist(id: string) {
+    return this.get<Artist>(`${ArtistsAPIEndpoint.artists}/${encodeURIComponent(id)}`);
   }
 
-  async createArtist(args: CreateArtistArgs) {
-    return this.post(ArtistsAPIEndpoint.artists, args);
+  createArtist(args: CreateArtistArgs) {
+    return this.post<Artist>(ArtistsAPIEndpoint.artists, args);
   }
 
-  async updateArtist(args: UpdateArtistArgs) {
-    return this.put(`${ArtistsAPIEndpoint.artists}/${encodeURIComponent(args.id)}`, args);
+  updateArtist(args: UpdateArtistArgs) {
+    return this.put<Artist>(`${ArtistsAPIEndpoint.artists}/${encodeURIComponent(args.id)}`, args);
   }
 
-  async deleteArtist(id: string) {
-    return this.delete(`${ArtistsAPIEndpoint.artists}/${encodeURIComponent(id)}`);
+  deleteArtist(id: string) {
+    return this.delete<DeleteResponse>(`${ArtistsAPIEndpoint.artists}/${encodeURIComponent(id)}`);
   }
 }
 

@@ -1,15 +1,17 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, BandsAPIEndpoint } from '../const/api';
-import { CreateBandArgs, UpdateBandArgs } from '../types/bands';
+import { Band, CreateBandArgs, UpdateBandArgs } from '../types/bands';
+import { DeleteResponse } from '../types/deleteResponse';
+import { List } from '../types/list';
 import { QueryParams } from '../types/queryParams';
 import getQueryParams from '../utils/getQueryParams';
 
 export interface BandsAPIDataSource {
-  getBand: (id: string) => Promise<any>
-  getBands: (queryParams?: QueryParams) => Promise<any>
-  createBand: (args: CreateBandArgs) => Promise<any>
-  updateBand: (args: UpdateBandArgs) => Promise<any>
-  deleteBand: (id: string) => Promise<any>
+  getBand: (id: string) => Promise<Band>
+  getBands: (queryParams?: QueryParams) => Promise<List<Band>>
+  createBand: (args: CreateBandArgs) => Promise<Band>
+  updateBand: (args: UpdateBandArgs) => Promise<Band>
+  deleteBand: (id: string) => Promise<DeleteResponse>
 }
 
 class BandsAPI extends RESTDataSource implements BandsAPIDataSource {
@@ -22,24 +24,24 @@ class BandsAPI extends RESTDataSource implements BandsAPIDataSource {
     request.headers.set('Authorization', this.context.token);
   }
 
-  async getBands(queryParams?: QueryParams) {
-    return this.get(`${BandsAPIEndpoint.bands}${getQueryParams(queryParams)}`);
+  getBands(queryParams?: QueryParams) {
+    return this.get<List<Band>>(`${BandsAPIEndpoint.bands}${getQueryParams(queryParams)}`);
   }
 
-  async getBand(id: string) {
-    return this.get(`${BandsAPIEndpoint.bands}/${encodeURIComponent(id)}`);
+  getBand(id: string) {
+    return this.get<Band>(`${BandsAPIEndpoint.bands}/${encodeURIComponent(id)}`);
   }
 
-  async createBand(args: CreateBandArgs) {
-    return this.post(BandsAPIEndpoint.bands, args);
+  createBand(args: CreateBandArgs) {
+    return this.post<Band>(BandsAPIEndpoint.bands, args);
   }
 
-  async updateBand(args: UpdateBandArgs) {
-    return this.put(`${BandsAPIEndpoint.bands}/${encodeURIComponent(args.id)}`, args);
+  updateBand(args: UpdateBandArgs) {
+    return this.put<Band>(`${BandsAPIEndpoint.bands}/${encodeURIComponent(args.id)}`, args);
   }
 
-  async deleteBand(id: string) {
-    return this.delete(`${BandsAPIEndpoint.bands}/${encodeURIComponent(id)}`);
+  deleteBand(id: string) {
+    return this.delete<DeleteResponse>(`${BandsAPIEndpoint.bands}/${encodeURIComponent(id)}`);
   }
 }
 

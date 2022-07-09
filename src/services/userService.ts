@@ -1,11 +1,13 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
 import { API, UserAPIEndpoint } from '../const/api';
-import { LoginArgs, RegisterUserArgs } from '../types/user';
+import {
+  Jwt, LoginArgs, RegisterUserArgs, User,
+} from '../types/user';
 
 export interface UsersAPIDataSource {
-  getUser: (id: string) => Promise<any>
-  registerUser: (args: RegisterUserArgs) => Promise<any>
-  login: (args: LoginArgs) => Promise<any>
+  getUser: (id: string) => Promise<User>
+  registerUser: (args: RegisterUserArgs) => Promise<User>
+  login: (args: LoginArgs) => Promise<Jwt>
 }
 
 class UsersAPI extends RESTDataSource implements UsersAPIDataSource {
@@ -14,16 +16,16 @@ class UsersAPI extends RESTDataSource implements UsersAPIDataSource {
     this.baseURL = API.users;
   }
 
-  async getUser(id: string) {
-    return this.get(`${UserAPIEndpoint.users}/${encodeURIComponent(id)}`);
+  getUser(id: string) {
+    return this.get<User>(`${UserAPIEndpoint.users}/${encodeURIComponent(id)}`);
   }
 
-  async registerUser(args: RegisterUserArgs) {
-    return this.post(UserAPIEndpoint.register, args);
+  registerUser(args: RegisterUserArgs) {
+    return this.post<User>(UserAPIEndpoint.register, args);
   }
 
-  async login(args: LoginArgs) {
-    return this.post(UserAPIEndpoint.login, args);
+  login(args: LoginArgs) {
+    return this.post<Jwt>(UserAPIEndpoint.login, args);
   }
 }
 

@@ -1,15 +1,17 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, AlbumsAPIEndpoint } from '../const/api';
-import { CreateAlbumArgs, UpdateAlbumArgs } from '../types/albums';
+import { Album, CreateAlbumArgs, UpdateAlbumArgs } from '../types/albums';
+import { DeleteResponse } from '../types/deleteResponse';
+import { List } from '../types/list';
 import { QueryParams } from '../types/queryParams';
 import getQueryParams from '../utils/getQueryParams';
 
 export interface AlbumsAPIDataSource {
-  getAlbum: (id: string) => Promise<any>
-  getAlbums: (queryParams?: QueryParams) => Promise<any>
-  createAlbum: (args: CreateAlbumArgs) => Promise<any>
-  updateAlbum: (args: UpdateAlbumArgs) => Promise<any>
-  deleteAlbum: (id: string) => Promise<any>
+  getAlbum: (id: string) => Promise<Album>
+  getAlbums: (queryParams?: QueryParams) => Promise<List<Album>>
+  createAlbum: (args: CreateAlbumArgs) => Promise<Album>
+  updateAlbum: (args: UpdateAlbumArgs) => Promise<Album>
+  deleteAlbum: (id: string) => Promise<DeleteResponse>
 }
 
 class AlbumsAPI extends RESTDataSource implements AlbumsAPIDataSource {
@@ -22,24 +24,24 @@ class AlbumsAPI extends RESTDataSource implements AlbumsAPIDataSource {
     request.headers.set('Authorization', this.context.token);
   }
 
-  async getAlbums(queryParams?: QueryParams) {
-    return this.get(`${AlbumsAPIEndpoint.albums}${getQueryParams(queryParams)}`);
+  getAlbums(queryParams?: QueryParams) {
+    return this.get<List<Album>>(`${AlbumsAPIEndpoint.albums}${getQueryParams(queryParams)}`);
   }
 
-  async getAlbum(id: string) {
-    return this.get(`${AlbumsAPIEndpoint.albums}/${encodeURIComponent(id)}`);
+  getAlbum(id: string) {
+    return this.get<Album>(`${AlbumsAPIEndpoint.albums}/${encodeURIComponent(id)}`);
   }
 
-  async createAlbum(args: CreateAlbumArgs) {
-    return this.post(AlbumsAPIEndpoint.albums, args);
+  createAlbum(args: CreateAlbumArgs) {
+    return this.post<Album>(AlbumsAPIEndpoint.albums, args);
   }
 
-  async updateAlbum(args: UpdateAlbumArgs) {
-    return this.put(`${AlbumsAPIEndpoint.albums}/${encodeURIComponent(args.id)}`, args);
+  updateAlbum(args: UpdateAlbumArgs) {
+    return this.put<Album>(`${AlbumsAPIEndpoint.albums}/${encodeURIComponent(args.id)}`, args);
   }
 
-  async deleteAlbum(id: string) {
-    return this.delete(`${AlbumsAPIEndpoint.albums}/${encodeURIComponent(id)}`);
+  deleteAlbum(id: string) {
+    return this.delete<DeleteResponse>(`${AlbumsAPIEndpoint.albums}/${encodeURIComponent(id)}`);
   }
 }
 
