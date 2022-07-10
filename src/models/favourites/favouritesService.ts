@@ -1,7 +1,7 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, FavouritesAPIEndpoint } from '../../const/api';
 import { Favourites } from '../../types/favourites';
-import { QueryParams } from '../../types/queryParams';
+import { QueryParams } from '../../types/common';
 import getQueryParams from '../../utils/getQueryParams';
 
 export interface FavouritesAPIDataSource {

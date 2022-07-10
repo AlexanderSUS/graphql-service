@@ -1,7 +1,7 @@
 import { UserInputError } from 'apollo-server-core';
 import { Resolvers } from '../../types/resolvers';
 import { Band, CreateBandArgs, UpdateBandArgs } from '../../types/bands';
-import { QueryParams } from '../../types/queryParams';
+import { QueryParams } from '../../types/common';
 import InputError from '../../const/errors';
 import filterByExistance from '../../utils/firlterByExistanse';
 

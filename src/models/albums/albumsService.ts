@@ -1,9 +1,7 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, AlbumsAPIEndpoint } from '../../const/api';
 import { Album, CreateAlbumArgs, UpdateAlbumArgs } from '../../types/albums';
-import { DeleteResponse } from '../../types/deleteResponse';
-import { List } from '../../types/list';
-import { QueryParams } from '../../types/queryParams';
+import { DeleteResponse, List, QueryParams } from '../../types/common';
 import getQueryParams from '../../utils/getQueryParams';
 
 export interface AlbumsAPIDataSource {

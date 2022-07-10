@@ -1,9 +1,7 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, GenresAPIEndpoint } from '../../const/api';
-import { DeleteResponse } from '../../types/deleteResponse';
+import { DeleteResponse, List, QueryParams } from '../../types/common';
 import { CreateGenreArgs, Genre, UpdateGenreArgs } from '../../types/genres';
-import { List } from '../../types/list';
-import { QueryParams } from '../../types/queryParams';
 import getQueryParams from '../../utils/getQueryParams';
 
 export interface GenresAPIDataSource {

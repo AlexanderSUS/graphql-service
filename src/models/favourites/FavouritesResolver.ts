@@ -1,6 +1,6 @@
 import { Resolvers } from '../../types/resolvers';
 import { Favourites } from '../../types/favourites';
-import { QueryParams } from '../../types/queryParams';
+import { QueryParams } from '../../types/common';
 import filterByExistance from '../../utils/firlterByExistanse';
 
 const favouritesResolver: Resolvers = {

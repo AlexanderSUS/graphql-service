@@ -1,7 +1,7 @@
 import { UserInputError } from 'apollo-server-core';
 import { Resolvers } from '../../types/resolvers';
 import { CreateTrackArgs, Track, UpdateTrackArgs } from '../../types/tracks';
-import { QueryParams } from '../../types/queryParams';
+import { QueryParams } from '../../types/common';
 import InputError from '../../const/errors';
 import filterByExistance from '../../utils/firlterByExistanse';
 

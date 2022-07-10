@@ -1,9 +1,7 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { API, ArtistsAPIEndpoint } from '../../const/api';
 import { Artist, CreateArtistArgs, UpdateArtistArgs } from '../../types/artists';
-import { DeleteResponse } from '../../types/deleteResponse';
-import { List } from '../../types/list';
-import { QueryParams } from '../../types/queryParams';
+import { DeleteResponse, List, QueryParams } from '../../types/common';
 import getQueryParams from '../../utils/getQueryParams';
 
 export interface ArtistsAPIDataSource {
