@@ -12,15 +12,15 @@ const userResolver: Resolvers = {
 
       return user;
     },
+
+    jwt(_: any, args: LoginArgs, { dataSources }) {
+      return dataSources.usersAPI.login(args);
+    },
   },
 
   Mutation: {
     register(_: any, args: RegisterUserArgs, { dataSources }) {
       return dataSources.usersAPI.registerUser(args);
-    },
-
-    jwt(_: any, args: LoginArgs, { dataSources }) {
-      return dataSources.usersAPI.login(args);
     },
   },
 };

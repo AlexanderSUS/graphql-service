@@ -15,11 +15,11 @@ const typeDefs = gql`
 
   type Query {
     user(id: ID!): User
+    jwt(email: String!, password: String!): Jwt 
   }
 
   type Mutation {
     register(firstName: String, lastName: String, password: String!, email: String!): User
-    jwt(email: String!, password: String!): Jwt 
   }
 `;
 
