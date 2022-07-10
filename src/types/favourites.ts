@@ -6,3 +6,8 @@ export type Favourites = {
   artistsIds: string[];
   tracksIds: string[];
 };
+
+export type FavouritesArgs = {
+  type: 'tracks' | 'bands' | 'artists' | 'genres';
+  id: string;
+};

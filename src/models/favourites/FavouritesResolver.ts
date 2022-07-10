@@ -2,6 +2,7 @@ import { Resolvers } from '../../types/resolvers';
 import { Favourites } from '../../types/favourites';
 import { QueryParams } from '../../types/common';
 import filterByExistance from '../../utils/firlterByExistanse';
+import FavouriteTypes from '../../const/favoriteTypes';
 
 const favouritesResolver: Resolvers = {
   Favourites: {
@@ -46,19 +47,27 @@ const favouritesResolver: Resolvers = {
 
   Mutation: {
     addTrackToFavourites(_: any, { tracksId }: { tracksId: string }, { dataSources }) {
-      return dataSources.favouritesAPI.addTrackToFavourites(tracksId);
+      return dataSources.favouritesAPI.addToFavourites(
+        { type: FavouriteTypes.tracks, id: tracksId },
+      );
     },
 
     addBandToFavourites(_: any, { bandsId }: { bandsId: string }, { dataSources }) {
-      return dataSources.favouritesAPI.addBandToFavourites(bandsId);
+      return dataSources.favouritesAPI.addToFavourites(
+        { type: FavouriteTypes.bands, id: bandsId },
+      );
     },
 
     addArtistToFavourites(_: any, { artistsId }: { artistsId: string }, { dataSources }) {
-      return dataSources.favouritesAPI.addArtistToFavourites(artistsId);
+      return dataSources.favouritesAPI.addToFavourites(
+        { type: FavouriteTypes.atrists, id: artistsId },
+      );
     },
 
     addGenreToFavourites(_: any, { genresId }: { genresId: string }, { dataSources }) {
-      return dataSources.favouritesAPI.addGenreToFavourites(genresId);
+      return dataSources.favouritesAPI.addToFavourites(
+        { type: FavouriteTypes.genres, id: genresId },
+      );
     },
   },
 };
