@@ -1,11 +1,11 @@
 import { DataSources } from 'apollo-server-core/dist/graphqlOptions';
-import { BandsAPIDataSource } from '../services/bandsService';
-import { GenresAPIDataSource } from '../services/genresService';
-import { UsersAPIDataSource } from '../services/userService';
-import { ArtistsAPIDataSource } from '../services/artistsService';
-import { TracksAPIDataSource } from '../services/tracksService';
-import { AlbumsAPIDataSource } from '../services/albumsService';
-import { FavouritesAPIDataSource } from '../services/favouritesService';
+import { BandsAPIDataSource } from '../models/bands/bandsService';
+import { GenresAPIDataSource } from '../models/genres/genresService';
+import { UsersAPIDataSource } from '../models/user/userService';
+import { ArtistsAPIDataSource } from '../models/artists/artistsService';
+import { TracksAPIDataSource } from '../models/tracks/tracksService';
+import { AlbumsAPIDataSource } from '../models/albums/albumsService';
+import { FavouritesAPIDataSource } from '../models/favourites/favouritesService';
 
 export interface IDataSources {
   usersAPI: UsersAPIDataSource,

@@ -1,8 +1,8 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
-import { API, UserAPIEndpoint } from '../const/api';
+import { API, UserAPIEndpoint } from '../../const/api';
 import {
   Jwt, LoginArgs, RegisterUserArgs, User,
-} from '../types/user';
+} from '../../types/user';
 
 export interface UsersAPIDataSource {
   getUser: (id: string) => Promise<User>

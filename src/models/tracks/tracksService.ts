@@ -1,10 +1,10 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
-import { API, TracksAPIEndpoint } from '../const/api';
-import { DeleteResponse } from '../types/deleteResponse';
-import { List } from '../types/list';
-import { QueryParams } from '../types/queryParams';
-import { CreateTrackArgs, Track, UpdateTrackArgs } from '../types/tracks';
-import getQueryParams from '../utils/getQueryParams';
+import { API, TracksAPIEndpoint } from '../../const/api';
+import { DeleteResponse } from '../../types/deleteResponse';
+import { List } from '../../types/list';
+import { QueryParams } from '../../types/queryParams';
+import { CreateTrackArgs, Track, UpdateTrackArgs } from '../../types/tracks';
+import getQueryParams from '../../utils/getQueryParams';
 
 export interface TracksAPIDataSource {
   getTrack: (id: string) => Promise<Track>

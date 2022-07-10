@@ -1,10 +1,10 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
-import { API, BandsAPIEndpoint } from '../const/api';
-import { Band, CreateBandArgs, UpdateBandArgs } from '../types/bands';
-import { DeleteResponse } from '../types/deleteResponse';
-import { List } from '../types/list';
-import { QueryParams } from '../types/queryParams';
-import getQueryParams from '../utils/getQueryParams';
+import { API, BandsAPIEndpoint } from '../../const/api';
+import { Band, CreateBandArgs, UpdateBandArgs } from '../../types/bands';
+import { DeleteResponse } from '../../types/deleteResponse';
+import { List } from '../../types/list';
+import { QueryParams } from '../../types/queryParams';
+import getQueryParams from '../../utils/getQueryParams';
 
 export interface BandsAPIDataSource {
   getBand: (id: string) => Promise<Band>

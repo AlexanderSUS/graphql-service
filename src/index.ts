@@ -1,26 +1,26 @@
 import { ApolloServer } from 'apollo-server';
-import userResolver from './graphql/resolvers/User';
-import userTypeDefs from './graphql/models/User';
-import bandTypeDefs from './graphql/models/Bands';
-import bandResolver from './graphql/resolvers/Bands';
-import genresTypeDefs from './graphql/models/Genres';
-import genresResolver from './graphql/resolvers/Genres';
-import arttistsTypeDefs from './graphql/models/Artists';
-import artistsResolver from './graphql/resolvers/Artists';
-import tracksTypeDefs from './graphql/models/Tracks';
-import tracksResolver from './graphql/resolvers/Tracks';
-import albumTypeDefs from './graphql/models/Albums';
-import albumsResolver from './graphql/resolvers/Albums';
-import favouritesTypeDefs from './graphql/models/Favourites';
-import favouritesResolver from './graphql/resolvers/Favourites';
+import userResolver from './models/user/UserResolver';
+import userTypeDefs from './models/user/UserTypeDefs';
+import bandTypeDefs from './models/bands/BandsTypeDefs';
+import bandResolver from './models/bands/BandsResolver';
+import genresTypeDefs from './models/genres/GenresTypeDefs';
+import genresResolver from './models/genres/GenresReolver';
+import arttistsTypeDefs from './models/artists/ArtistsTypeDefs';
+import artistsResolver from './models/artists/ArtistsResolver';
+import tracksTypeDefs from './models/tracks/TracksTypeDefs';
+import tracksResolver from './models/tracks/TracksResolver';
+import albumTypeDefs from './models/albums/AlbumTypeDefs';
+import albumsResolver from './models/albums/AlbumsResolver';
+import favouritesTypeDefs from './models/favourites/FavouritesTypeDefs';
+import favouritesResolver from './models/favourites/FavouritesResolver';
 import { IDataSources, MyDataSources } from './types/dataSources';
-import UsersAPI from './services/userService';
-import BandsAPI from './services/bandsService';
-import GenresAPI from './services/genresService';
-import ArtistsAPI from './services/artistsService';
-import TracksAPI from './services/tracksService';
-import AlbumsAPI from './services/albumsService';
-import FavouritesAPI from './services/favouritesService';
+import UsersAPI from './models/user/userService';
+import BandsAPI from './models/bands/bandsService';
+import GenresAPI from './models/genres/genresService';
+import ArtistsAPI from './models/artists/artistsService';
+import TracksAPI from './models/tracks/tracksService';
+import AlbumsAPI from './models/albums/albumsService';
+import FavouritesAPI from './models/favourites/favouritesService';
 
 const dataSources = () => {
   const sources: IDataSources = {

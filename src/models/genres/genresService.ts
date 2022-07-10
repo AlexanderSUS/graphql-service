@@ -1,10 +1,10 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
-import { API, GenresAPIEndpoint } from '../const/api';
-import { DeleteResponse } from '../types/deleteResponse';
-import { CreateGenreArgs, Genre, UpdateGenreArgs } from '../types/genres';
-import { List } from '../types/list';
-import { QueryParams } from '../types/queryParams';
-import getQueryParams from '../utils/getQueryParams';
+import { API, GenresAPIEndpoint } from '../../const/api';
+import { DeleteResponse } from '../../types/deleteResponse';
+import { CreateGenreArgs, Genre, UpdateGenreArgs } from '../../types/genres';
+import { List } from '../../types/list';
+import { QueryParams } from '../../types/queryParams';
+import getQueryParams from '../../utils/getQueryParams';
 
 export interface GenresAPIDataSource {
   getGenre: (id: string) => Promise<Genre>
