@@ -3,29 +3,38 @@ import { Resolvers } from '../../types/resolvers';
 import { CreateTrackArgs, Track, UpdateTrackArgs } from '../../types/tracks';
 import { QueryParams } from '../../types/queryParams';
 import InputError from '../../const/errors';
+import filterByExistance from '../../utils/firlterByExistanse';
 
 const tracksResolver: Resolvers = {
   Track: {
-    genres(track: Track, args: any, { dataSources }) {
-      return Promise.all(
+    async genres(track: Track, args: any, { dataSources }) {
+      const genres = await Promise.all(
         track.genresIds.map((genreId) => dataSources.genresAPI.getGenre(genreId)),
       );
+
+      return filterByExistance(genres);
     },
 
-    bands(track: Track, args: any, { dataSources }) {
-      return Promise.all(
+    async bands(track: Track, args: any, { dataSources }) {
+      const bands = await Promise.all(
         track.bandsIds.map((bandsId) => dataSources.bandsAPI.getBand(bandsId)),
       );
+
+      return filterByExistance(bands);
     },
 
-    album(track: Track, args: any, { dataSources }) {
-      return dataSources.albumsAPI.getAlbum(track.albumId);
+    async album(track: Track, args: any, { dataSources }) {
+      const album = await dataSources.albumsAPI.getAlbum(track.albumId);
+
+      return album || null;
     },
 
-    artists(track: Track, args: any, { dataSources }) {
-      return Promise.all(
+    async artists(track: Track, args: any, { dataSources }) {
+      const artsts = await Promise.all(
         track.artistsIds.map((artistId) => dataSources.artistsAPI.getArtist(artistId)),
       );
+
+      return filterByExistance(artsts);
     },
   },
 

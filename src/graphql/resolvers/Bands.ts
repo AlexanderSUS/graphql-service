@@ -3,24 +3,28 @@ import { Resolvers } from '../../types/resolvers';
 import { Band, CreateBandArgs, UpdateBandArgs } from '../../types/bands';
 import { QueryParams } from '../../types/queryParams';
 import InputError from '../../const/errors';
-import { Artist } from '../../types/artists';
+import filterByExistance from '../../utils/firlterByExistanse';
 
 const bandsResolver: Resolvers = {
   Band: {
-    genres(band: Band, args: any, { dataSources }) {
-      return Promise.all(band.genresIds.map((genreId) => dataSources.genresAPI.getGenre(genreId)));
+    async genres(band: Band, args: any, { dataSources }) {
+      const genres = await Promise.all(
+        band.genresIds.map((genreId) => dataSources.genresAPI.getGenre(genreId)),
+      );
+
+      return filterByExistance(genres);
     },
 
     async members(band: Band, args: any, { dataSources }) {
       const { members } = band;
 
-      return (
-        await Promise.all(
-          members.map(
-            async (member) => dataSources.artistsAPI.getArtist(member.artist) as Promise<Artist[]>,
-          ),
-        )
-      ).map((artist, index) => ({
+      const artists = await Promise.all(
+        members.map(
+          async (member) => dataSources.artistsAPI.getArtist(member.artist),
+        ),
+      );
+
+      return filterByExistance(artists).map((artist, index) => ({
         ...artist,
         instrument: members[index].instrument,
         years: members[index].years,
@@ -34,7 +38,7 @@ const bandsResolver: Resolvers = {
     },
 
     async band(_: any, { id }: { id : string }, { dataSources }) {
-      const band = await dataSources.bandsAPI.getBand(id) as Band;
+      const band = await dataSources.bandsAPI.getBand(id);
 
       if (!band._id) throw new UserInputError(InputError.badBandId);
 

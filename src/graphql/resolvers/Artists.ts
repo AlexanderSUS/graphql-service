@@ -3,11 +3,16 @@ import { Resolvers } from '../../types/resolvers';
 import { Artist, CreateArtistArgs, UpdateArtistArgs } from '../../types/artists';
 import { QueryParams } from '../../types/queryParams';
 import InputError from '../../const/errors';
+import filterByExistance from '../../utils/firlterByExistanse';
 
 const artistsResolver: Resolvers = {
   Artist: {
-    bands(artist: Artist, args: any, { dataSources }) {
-      return Promise.all(artist.bandsIds.map((bandId) => dataSources.bandsAPI.getBand(bandId)));
+    async bands(artist: Artist, args: any, { dataSources }) {
+      const bands = await Promise.all(
+        artist.bandsIds.map((bandId) => dataSources.bandsAPI.getBand(bandId)),
+      );
+
+      return filterByExistance(bands);
     },
   },
 
