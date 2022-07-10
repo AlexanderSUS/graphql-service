@@ -30,11 +30,11 @@ const tracksResolver: Resolvers = {
     },
 
     async artists(track: Track, args: any, { dataSources }) {
-      const artsts = await Promise.all(
+      const artists = await Promise.all(
         track.artistsIds.map((artistId) => dataSources.artistsAPI.getArtist(artistId)),
       );
 
-      return filterByExistance(artsts);
+      return filterByExistance(artists);
     },
   },
 

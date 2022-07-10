@@ -30,7 +30,7 @@ const typeDefs = gql`
   }
 
  type Mutation {
-    createTrack(title: String!,  albumId: ID, aritistIds: [ID] bandsIds: [ID], duration: Int, released: Int, genresIds: [ID]): Track
+    createTrack(title: String!,  albumId: ID, artistsIds: [ID] bandsIds: [ID], duration: Int, released: Int, genresIds: [ID]): Track
     updateTrack(id: ID!, title: String!,  albumId: ID, aritistIds: [ID], bandsIds: [ID], duration: Int, released: Int, genresIds: [ID]): Track
     deleteTrack(id: ID!): DeleteTrackReturnObject
   }
