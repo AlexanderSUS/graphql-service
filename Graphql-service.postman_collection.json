@@ -1,0 +1,1913 @@
+{
+	"info": {
+		"_postman_id": "f526043c-624c-4dd1-8137-d7cdc628ae91",
+		"name": "Graphql-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20817272"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// set user ID to variable",
+									"const jsonData = JSON.parse(responseBody);",
+									"",
+									"const userId = jsonData.data.register._id;",
+									"",
+									"pm.environment.set(\"userId\", userId);",
+									"",
+									"pm.test(\"Register return user ID\", function () {",
+									"    pm.expect(userId.length).greaterThan(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment  name",
+									"const userNameArray = (pm.variables.get('userName') || 'User 0').split(\" \");",
+									"",
+									"const userNameCount = userNameArray.pop();",
+									"",
+									"pm.environment.set(\"userName\", `${userNameArray.join(\" \")} ${+userNameCount + 1}`)",
+									"",
+									"// Increment  email",
+									"const userEmailCount = (pm.variables.get('userEmail') || 'user1@test.com').slice(4).split('@').shift();",
+									"",
+									"pm.environment.set(\"userEmail\", `user${+userEmailCount + 1}@test.com`);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Register($password: String!, $email: String!, $firstName: String,  $lastName: String) {\n  register(password: $password, email: $email, firstName: $firstName, lastName: $lastName) {\n    _id\n    firstName\n    lastName\n    password\n    email\n  }\n}",
+								"variables": "{\n  \"password\": \"{{userPassword}}\",\n  \"email\": \"{{userEmail}}\",\n  \"firstName\": \"{{userName}}\",\n  \"lastName\": \"Ivanov\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query user ($id: ID!) {\n    user (id: $id) {\n        _id\n        firstName\n        lastName\n        password\n        email\n    }\n}",
+								"variables": "{\n  \"id\": \"{{userId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "jwt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"token\", jsonData.data.jwt.jwt);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query jwt ($email: String!, $password: String!) {\n    jwt (email: $email, password: $password) {\n        jwt\n    }\n}",
+								"variables": "{\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"{{userPassword}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Genres",
+			"item": [
+				{
+					"name": "genres",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query genres ($limit: Int, $offset: Int) {\n    genres (limit: $limit, offset: $offset) {\n        items {\n            _id\n            name\n            description\n            country\n            year\n        }\n        limit\n        offset\n        total\n    }\n}",
+								"variables": "{\n  \"limit\": 10,\n  \"offset\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "genre",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query genre ($id: ID!) {\n    genre (id: $id) {\n        _id\n        name\n        description\n        country\n        year\n    }\n}",
+								"variables": "{\n  \"id\": \"{{genreId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createGenre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Set genre ID from response to variable",
+									"const jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"genreId\", jsonData.data.createGenre._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment genre name",
+									"const genreNameArray = (pm.variables.get('genreName') || 'Genre Name 0').split(\" \");",
+									"",
+									"const nameCount = genreNameArray.pop();",
+									"",
+									"pm.environment.set(\"genreName\", `${genreNameArray.join(\" \")} ${+nameCount + 1}`)",
+									"",
+									"// Increment genre year",
+									"const genreYear = pm.variables.get('genreYear') || 1960;",
+									"",
+									"pm.environment.set(\"genreYear\", genreYear + 1)",
+									"",
+									"// Increment genre description",
+									"const genreDescriptionArray = (pm.variables.get('genreDescription') || 'Genre description 1').split(\" \");",
+									"",
+									"const count = genreDescriptionArray.pop();",
+									"",
+									"pm.environment.set(\"genreDescription\", `${genreDescriptionArray.join(\" \")} ${+count + 1}`)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createGenre ($name: String, $description: String, $country: String, $year: Int) {\n    createGenre (name: $name, description: $description, country: $country, year: $year) {\n        _id\n        name\n        description\n        country\n        year\n    }\n}",
+								"variables": "{\n  \"name\": \"{{genreName}}\",\n  \"description\": \"{{genreDescription}}\",\n  \"country\": \"Some country\",\n  \"year\": {{genreYear}}\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateGenre",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment genre description",
+									"const genreDescriptionArray = (pm.variables.get('genreDescription') || 'Genre description 1').split(\" \");",
+									"",
+									"const count = genreDescriptionArray.pop();",
+									"",
+									"pm.environment.set(\"genreDescription\", `${genreDescriptionArray.join(\" \")} ${+count + 1}`)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateGenre ($id: ID!, $name: String, $description: String, $country: String, $year: Int) {\n    updateGenre (id: $id, name: $name, description: $description, country: $country, year: $year) {\n        _id\n        name\n        description\n        country\n        year\n    }\n}",
+								"variables": "{\n  \"id\": \"{{genreId}}\",\n  \"name\": \"Genre name\",\n  \"description\": \"{{genreDescription}}\",\n  \"country\": \"Country\",\n  \"year\": 1989\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteGenre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// // Set genre ID from response to variable",
+									"// const jsonData = JSON.parse(responseBody);",
+									"// pm.environment.set(\"genreId\", jsonData.data.createGenre._id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation deleteGenre ($id: ID!) {\n    deleteGenre (id: $id) {\n        acknowledged\n        deletedCount\n    }\n}",
+								"variables": "{\n  \"id\": \"{{genreId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bands",
+			"item": [
+				{
+					"name": "bands",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query bands ($limit: Int, $offset: Int) {\n    bands (limit: $limit, offset: $offset) {\n        items {\n            _id\n            name\n            origin\n            members {\n                _id\n                firstName\n                instrument\n                years\n            }\n            website\n            genres {\n                _id\n                name\n                description\n                country\n                year\n            }\n        }\n        limit\n        offset\n        total\n    }\n}",
+								"variables": "{\n  \"limit\": 20,\n  \"offset\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "band",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query band ($id: ID!) {\n    band (id: $id) {\n        _id\n        name\n        origin\n        members {\n            _id\n            firstName\n            instrument\n            years\n        }\n        website\n        genres {\n            _id\n            name\n            description\n            country\n            year\n        }\n    }\n}",
+								"variables": "{\n  \"id\": \"{{bandId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createBand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"bandId\", jsonData.data.createBand._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment Album name",
+									"const bandNameArray = (pm.variables.get('bandName') || 'Band name 0').split(\" \");",
+									"",
+									"const count = bandNameArray.pop();",
+									"",
+									"pm.environment.set(\"bandName\", `${bandNameArray.join(\" \")} ${+count + 1}`)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ($name: String, $origin: String, $website: String) {\n  createBand(name: $name, origin: $origin, website: $website) {\n    _id\n    name\n    origin\n    members {\n      _id\n      firstName\n    }\n    website\n    genres {\n      _id\n      name\n    }\n  }\n}",
+								"variables": "{\n  \"name\": \"{{bandName}}\",\n  \"origin\": \"UK\",\n  \"website\": \"www.newband.music\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createBand w Member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"bandId\", jsonData.data.createBand._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment Album name",
+									"const bandNameArray = (pm.variables.get('bandName') || 'Band name 0').split(\" \");",
+									"",
+									"const count = bandNameArray.pop();",
+									"",
+									"pm.environment.set(\"bandName\", `${bandNameArray.join(\" \")} ${+count + 1}`)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ($name: String, $origin: String, $website: String, $members: [MemberInput]) {\n  createBand(name: $name, origin: $origin, website: $website, members: $members) {\n    _id\n    name\n    origin\n    members {\n      _id\n      firstName\n    }\n    website\n    genres {\n      _id\n      name\n    }\n  }\n}",
+								"variables": "{\n  \"name\": \"{{bandName}}\",\n  \"origin\": \"UK\",\n  \"website\": \"www.newband.music\",\n  \"members\": [\n    { \n        \"artist\": \"{{artistId}}\",\n        \"instrument\": \"drums\",\n        \"years\": [ \"1990\", \"1991\", \"1992\"]\n    }\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createBand w Genres",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"bandId\", jsonData.data.createBand._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment Album name",
+									"const bandNameArray = (pm.variables.get('bandName') || 'Band name 0').split(\" \");",
+									"",
+									"const count = bandNameArray.pop();",
+									"",
+									"pm.environment.set(\"bandName\", `${bandNameArray.join(\" \")} ${+count + 1}`)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ($name: String, $origin: String, $website: String, $genresIds: [ID]) {\n  createBand(name: $name, origin: $origin, website: $website, genresIds: $genresIds) {\n    _id\n    name\n    origin\n    members {\n      _id\n      firstName\n    }\n    website\n    genres {\n      _id\n      name\n      year\n      country\n      description\n    }\n  }\n}",
+								"variables": "{\n  \"name\": \"{{bandName}}\",\n  \"origin\": \"UK\",\n  \"website\": \"www.newband.music\",\n  \"genresIds\": [ \n        \"{{genreId}}\" \n    ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createBand w all deps",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"bandId\", jsonData.data.createBand._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment Album name",
+									"const bandNameArray = (pm.variables.get('bandName') || 'Band name 0').split(\" \");",
+									"",
+									"const count = bandNameArray.pop();",
+									"",
+									"pm.environment.set(\"bandName\", `${bandNameArray.join(\" \")} ${+count + 1}`)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($name: String, $origin: String, $members: [MemberInput], $website: String, $genresIds: [ID]) {\n  createBand(name: $name, origin: $origin, members: $members, website: $website, genresIds: $genresIds) {\n    _id\n    name\n    origin\n    members {\n      _id\n      firstName\n      secondName\n      middleName\n      instrument\n      years\n    }\n    website\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n  }\n}",
+								"variables": "{\n  \"name\": \"{{bandName}}\",\n  \"origin\": \"UK\",\n  \"website\": \"www.newband.music\",\n  \"members\": [\n    { \n        \"artist\": \"{{artistId}}\",\n        \"instrument\": \"drums\",\n        \"years\": [ \"1990\", \"1991\", \"1992\"]\n    },\n        { \n        \"artist\": \"{{artistId}}\",\n        \"instrument\": \"vocal\",\n        \"years\": [ \"1993\", \"1994\", \"1995\"]\n    }\n  ],\n  \"genresIds\": [ \n        \"{{genreId}}\" \n    ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateBand Genres",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateAlbum($id: ID!, $genresIds: [ID]) {\n  updateBand(id: $id, genresIds: $genresIds) {\n    _id\n    name\n    origin\n    members {\n      _id\n      firstName\n      secondName\n      middleName\n      instrument\n      years\n    }\n    website\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{bandId}}\",\n  \"genresIds\": [\n    \"{{genreId}}\"\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateBand Members",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateAlbum($id: ID!, $members: [MemberInput]) {\n  updateBand(id: $id, members: $members) {\n    _id\n    name\n    origin\n    members {\n      _id\n      firstName\n      secondName\n      middleName\n      instrument\n      years\n    }\n    website\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{bandId}}\",\n  \"members\": {\n    \"artist\": \"{{artistId}}\",\n    \"instrument\": \"Ukulele\",\n    \"years\": [\n      \"2003\", \"2004\"\n    ]\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateBand w all dependencies",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($id: ID!, $name: String, $origin: String, $members: [MemberInput], $website: String, $genresIds: [ID]) {\n  updateBand(id: $id, name: $name, origin: $origin, members: $members, website: $website, genresIds: $genresIds) {\n    _id\n    name\n    origin\n    members {\n      _id\n      firstName\n      secondName\n      middleName\n      instrument\n      years\n    }\n    website\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{bandId}}\",\n  \"name\": \"Updated Band name\",\n  \"origin\": \"Updated origin\",\n  \"members\": {\n    \"artist\": \"{{artistId}}\",\n    \"instrument\": \"Ukulele\",\n    \"years\": [\n      \"2003\", \"2004\"\n    ]\n  },\n  \"website\": \"newwebsite.web\",\n  \"genresIds\": [\n    \"{{genreId}}\"\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteBand",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation deleteBand ($id: ID!) {\n    deleteBand (id: $id) {\n        acknowledged\n        deletedCount\n    }\n}",
+								"variables": "{\n  \"id\": \"{{bandId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Artist",
+			"item": [
+				{
+					"name": "artists",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Query {\n  artists {\n    items {\n      _id\n      firstName\n      secondName\n      middleName\n      birthDate\n      birthPlace\n      country\n      bands {\n        _id\n        name\n        origin\n        members {\n          firstName\n          secondName\n          middleName\n          years\n          _id\n          instrument\n        }\n        website\n        genres {\n          _id\n          name\n          description\n          country\n          year\n        }\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"limit\": 20,\n  \"offset\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "artist",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query artist ($id: ID!) {\n    artist (id: $id) {\n        _id\n        firstName\n        secondName\n        middleName\n        birthDate\n        birthPlace\n        country\n        bands {\n            _id\n            name\n            origin\n            website\n            genres {\n                _id\n                name\n                description\n                country\n                year\n            }\n        }\n        instruments\n    }\n}",
+								"variables": "{\n  \"id\": \"{{artistId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createArtist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"artistId\", jsonData.data.createArtist._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// increment artist name",
+									"const artistNameArray = (pm.variables.get('artistName') || 'Artist Name 0').split(\" \");",
+									"",
+									"const artistNameCount = artistNameArray.pop();",
+									"",
+									"pm.environment.set(\"artistName\", `${artistNameArray.join(\" \")} ${+artistNameCount + 1}`)",
+									"",
+									"// increment artist second name",
+									"const artistSecondNameArray = (pm.variables.get('artistSecondName') || 'Artist Second Name 0').split(\" \");",
+									"",
+									"const artistSecondNameCount = artistSecondNameArray.pop();",
+									"",
+									"pm.environment.set(\"artistSecondName\", `${artistSecondNameArray.join(\" \")} ${+artistSecondNameCount + 1}`)",
+									"",
+									"// increment artist middle name",
+									"const artistMiddleNameArray = (pm.variables.get('artistMiddleName') || 'Artist Middle Name 0').split(\" \");",
+									"",
+									"const artistMiddleNameCount = artistMiddleNameArray.pop();",
+									"",
+									"pm.environment.set(\"artistMiddleName\", `${artistMiddleNameArray.join(\" \")} ${+artistMiddleNameCount + 1}`)",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateArtist($firstName: String, $secondName: String, $middleName: String, $birthDate: String, $birthPlace: String, $country: String, $instruments: [String]) {\n  createArtist(firstName: $firstName, secondName: $secondName, middleName: $middleName, birthDate: $birthDate, birthPlace: $birthPlace, country: $country, instruments: $instruments) {\n    _id\n    firstName\n    middleName\n    secondName\n    birthDate\n    birthPlace\n    country\n    bands {\n      _id\n      name\n      origin\n      members {\n        middleName\n        _id\n        firstName\n        secondName\n        instrument\n        years\n      }\n      website\n      genres {\n        _id\n        name\n        description\n        country\n        year\n      }\n    }\n    instruments\n  }\n}",
+								"variables": "{\n  \"firstName\": \"{{artistName}}\",\n  \"secondName\": \"{{artistSecondName}}\",\n  \"middleName\": \"{{artistMiddleName}}\",\n  \"birthDate\": \"12/10/1980\",\n  \"birthPlace\": \"California\",\n  \"country\": \"USA\",\n  \"instruments\": [\"guitar\", \"vocal\"]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createArtist w Band",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"artistId\", jsonData.data.createArtist._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// increment artist name",
+									"const artistNameArray = (pm.variables.get('artistName') || 'Artist Name 0').split(\" \");",
+									"",
+									"const artistNameCount = artistNameArray.pop();",
+									"",
+									"pm.environment.set(\"artistName\", `${artistNameArray.join(\" \")} ${+artistNameCount + 1}`)",
+									"",
+									"// increment artist second name",
+									"const artistSecondNameArray = (pm.variables.get('artistSecondName') || 'Artist Second Name 0').split(\" \");",
+									"",
+									"const artistSecondNameCount = artistSecondNameArray.pop();",
+									"",
+									"pm.environment.set(\"artistSecondName\", `${artistSecondNameArray.join(\" \")} ${+artistSecondNameCount + 1}`)",
+									"",
+									"// increment artist middle name",
+									"const artistMiddleNameArray = (pm.variables.get('artistMiddleName') || 'Artist Middle Name 0').split(\" \");",
+									"",
+									"const artistMiddleNameCount = artistMiddleNameArray.pop();",
+									"",
+									"pm.environment.set(\"artistMiddleName\", `${artistMiddleNameArray.join(\" \")} ${+artistMiddleNameCount + 1}`)",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateArtist($firstName: String, $secondName: String, $middleName: String, $birthDate: String, $birthPlace: String, $country: String, $bandsIds: [ID], $instruments: [String]) {\n  createArtist(firstName: $firstName, secondName: $secondName, middleName: $middleName, birthDate: $birthDate, birthPlace: $birthPlace, country: $country, bandsIds: $bandsIds, instruments: $instruments) {\n    _id\n    firstName\n    middleName\n    secondName\n    birthDate\n    birthPlace\n    country\n    bands {\n      _id\n      name\n      origin\n      members {\n        middleName\n        _id\n        firstName\n        secondName\n        instrument\n        years\n      }\n      website\n      genres {\n        _id\n        name\n        description\n        country\n        year\n      }\n    }\n    instruments\n  }\n}",
+								"variables": "{\n  \"firstName\": \"{{artistName}}\",\n  \"secondName\": \"{{artistSecondName}}\",\n  \"middleName\": \"{{artistMiddleName}}\",\n  \"birthDate\": \"12/10/1980\",\n  \"birthPlace\": \"California\",\n  \"country\": \"USA\",\n  \"instruments\": [\"guitar\", \"vocal\"],\n  \"bandsIds\": [\"{{bandId}}\"]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateArtist",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const artistUpdatedNameArray = (pm.variables.get('artistUpdatedName') || 'Artist Updated Name 0').split(\" \");",
+									"",
+									"const artistUpdatedNameCount = artistUpdatedNameArray.pop();",
+									"",
+									"pm.environment.set(\"artistUpdatedName\", `${artistUpdatedNameArray.join(\" \")} ${+artistUpdatedNameCount + 1}`)",
+									"",
+									"// increment artist second name",
+									"const artistUpdatedSecondNameArray = (pm.variables.get('artistUpdatedSecondName') || 'Artist Updated Second Name 0').split(\" \");",
+									"",
+									"const artistUpdatedSecondNameCount = artistUpdatedSecondNameArray.pop();",
+									"",
+									"pm.environment.set(\"artistUpdatedSecondName\", `${artistUpdatedSecondNameArray.join(\" \")} ${+artistUpdatedSecondNameCount + 1}`)",
+									"",
+									"// increment artist middle name",
+									"const artistUpdatedMiddleNameArray = (pm.variables.get('artistUpdatedMiddleName') || 'Artist Updated Middle Name 0').split(\" \");",
+									"",
+									"const artistUpdatedMiddleNameCount = artistUpdatedMiddleNameArray.pop();",
+									"",
+									"pm.environment.set(\"artistUpdatedMiddleName\", `${artistUpdatedMiddleNameArray.join(\" \")} ${+artistUpdatedMiddleNameCount + 1}`)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateArtist($id: ID!, $firstName: String, $secondName: String, $middleName: String, $birthDate: String, $birthPlace: String, $country: String, $bandsIds: [ID], $instruments: [String]) {\n  updateArtist(id: $id, firstName: $firstName, secondName: $secondName, middleName: $middleName, birthDate: $birthDate, birthPlace: $birthPlace, country: $country, bandsIds: $bandsIds, instruments: $instruments) {\n    _id\n    firstName\n    secondName\n    middleName\n    birthDate\n    birthPlace\n    country\n    bands {\n      genres {\n        year\n        country\n        description\n        name\n        _id\n      }\n      website\n      members {\n        years\n        instrument\n        secondName\n        middleName\n        firstName\n        _id\n      }\n      origin\n      name\n      _id\n    }\n    instruments\n  }\n}",
+								"variables": "{\n  \"id\": \"{{artistId}}\",\n  \"firstName\": \"{{artistUpdatedName}}\",\n  \"secondName\": \"{{artistUpdatedSecondName}}\",\n  \"middleName\": \"{{artistUpdatedMiddleName}}\",\n  \"birthDate\": \"23/12/1900\",\n  \"birthPlace\": \"Missuri\",\n  \"country\": \"USA\",\n  \"bandsIds\": [\n    \"{{bandId}}\"\n  ],\n  \"instruments\": [ \n    \"Dums\",\n    \"flute\"\n    ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteArtist",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation deleteArtist ($id: ID!) {\n    deleteArtist (id: $id) {\n        acknowledged\n        deletedCount\n    }\n}",
+								"variables": "{\n  \"id\": \"{{artistId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Albums",
+			"item": [
+				{
+					"name": "albums",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Query($limit: Int, $offset: Int) {\n  albums(limit: $limit, offset: $offset) {\n    items {\n      _id\n      name\n      released\n      bands {\n        _id\n        name\n        origin\n        website\n        genres {\n          _id\n          name\n          description\n          country\n          year\n        }\n      }\n      genres {\n        _id\n        name\n        description\n        country\n        year\n      }\n      image\n    }\n    limit\n    offset\n    total\n  }\n}",
+								"variables": "{\n  \"limit\": 30,\n  \"offset\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "album",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Query($id: ID!) {\n  album(id: $id) {\n    _id\n    name\n    released\n    artists {\n      _id\n      firstName\n      secondName\n      middleName\n      instruments\n      country\n      birthPlace\n      birthDate\n    }\n    bands {\n      _id\n      name\n      origin\n    }\n    tracks {\n      _id\n      title\n      album {\n        _id\n        name\n        released\n      }\n    }\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n    image\n  }\n}",
+								"variables": "{\n  \"id\": \"{{albumId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createAlbum",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment Album name",
+									"const albumNameArray = (pm.variables.get('albumName') || 'Album Name 1').split(\" \");",
+									"",
+									"const nameCount = albumNameArray.pop();",
+									"",
+									"pm.environment.set(\"albumName\", `${albumNameArray.join(\" \")} ${+nameCount + 1}`)",
+									"",
+									"//Increment reslease",
+									"const release = pm.variables.get('release') || 1976;",
+									"",
+									"pm.environment.set(\"release\", release + 1)",
+									"",
+									"// Increment imge url",
+									"const imageUrlArray = (pm.variables.get('imageUrl') || 'image url 1').split(\" \");",
+									"",
+									"const imgUrlcount = imageUrlArray.pop();",
+									"",
+									"pm.environment.set(\"imageUrl\", `${imageUrlArray.join(\" \")} ${+imgUrlcount + 1}`)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Set  ID from response to variable",
+									"const jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"albumId\", jsonData.data.createAlbum._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateAlbum($name: String, $released: Int, $image: String) {\n  createAlbum(name: $name, released: $released, image: $image) {\n    _id\n    name\n    released\n    artists {\n      _id\n      firstName\n    }\n    bands {\n      _id\n      name\n    }\n    tracks {\n      _id\n      title\n    }\n    genres {\n      _id\n      name\n    }\n    image\n  }\n}",
+								"variables": "{\n  \"name\": \"{{albumName}}\",\n  \"released\": {{release}},\n  \"image\": \"{{imageUrl}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createAlbum w all deps",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const albumNameArray = (pm.variables.get('albumName') || 'Album Name 1').split(\" \");",
+									"",
+									"const nameCount = albumNameArray.pop();",
+									"",
+									"pm.environment.set(\"albumName\", `${albumNameArray.join(\" \")} ${+nameCount + 1}`)",
+									"",
+									"//Increment reslease",
+									"const release = pm.variables.get('release') || 1976;",
+									"",
+									"pm.environment.set(\"release\", release + 1)",
+									"",
+									"// Increment imge url",
+									"const imageUrlArray = (pm.variables.get('imageUrl') || 'image url 1').split(\" \");",
+									"",
+									"const imgUrlcount = imageUrlArray.pop();",
+									"",
+									"pm.environment.set(\"imageUrl\", `${imageUrlArray.join(\" \")} ${+imgUrlcount + 1}`)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Set  ID from response to variable",
+									"const jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"albumId\", jsonData.data.createAlbum._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateAlbum($name: String, $released: Int, $artists: [ID], $bands: [ID], $tracks: [ID], $genres: [ID], $image: String) {\n  createAlbum(name: $name, released: $released, artistsIds: $artists, bandsIds: $bands, trackIds: $tracks, genresIds: $genres, image: $image) {\n     _id\n    name\n    released\n    artists {\n      _id\n      firstName\n      secondName\n      middleName\n      instruments\n      country\n      birthPlace\n      birthDate\n    }\n    bands {\n      _id\n      name\n      origin\n    }\n    tracks {\n      _id\n      title\n      album {\n        _id\n        name\n        released\n      }\n    }\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n    image\n  }\n}",
+								"variables": "{\n  \"name\": \"{{albumName}}\",\n  \"released\": {{release}},\n  \"bands\": [\n    \"{{bandId}}\"\n    ],\n  \"genres\": [\n    \"{{genreId}}\"\n    ],\n  \"artists\": [ \n    \"{{artistId}}\"\n    ],\n  \"tracks\": [ \n    \"{{trackId}}\"\n    ],\n  \"image\": \"{{imageUrl}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateAlbum w Image",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment imge url",
+									"const imageUrlArray = (pm.variables.get('imageUrl') || 'imgae url 1').split(\" \");",
+									"",
+									"const imgUrlcount = imageUrlArray.pop();",
+									"",
+									"pm.environment.set(\"imageUrl\", `${imageUrlArray.join(\" \")} ${+imgUrlcount + 1}`)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateAlbum($id: ID!, $image: String) {\n  updateAlbum(id: $id, image: $image) {\n    _id\n    name\n    released\n    artists {\n      _id\n      firstName\n      secondName\n      country\n      instruments\n    }\n    bands {\n      _id\n      name\n      origin\n      members {\n        _id\n        firstName\n        secondName\n        middleName\n        instrument\n        years\n      }\n      website\n      genres {\n        _id\n        name\n      }\n    }\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n    image\n    tracks {\n      _id\n      title\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{albumId}}\",\n  \"image\": \"{{imageUrl}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateAlbum w Genre",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateAlbum($id: ID!,$genres: [ID]) {\n  updateAlbum(id: $id,  genresIds: $genres) {\n    _id\n    name\n    released\n    artists {\n      _id\n      firstName\n      secondName\n      country\n      instruments\n    }\n    bands {\n      _id\n      name\n      origin\n      members {\n        _id\n        firstName\n        secondName\n        middleName\n        instrument\n        years\n      }\n      website\n      genres {\n        _id\n        name\n      }\n    }\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n    image\n    tracks {\n      _id\n      title\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{albumId}}\",\n  \"genres\": [\n    \"{{genreId}}\"\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateAlbum w Band",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateAlbum($id: ID!, $bands: [ID]) {\n  updateAlbum(id: $id,  bandsIds: $bands) {\n    _id\n    name\n    released\n    artists {\n      _id\n      firstName\n      secondName\n      country\n      instruments\n    }\n    bands {\n      _id\n      name\n      origin\n      members {\n        _id\n        firstName\n        secondName\n        middleName\n        instrument\n        years\n      }\n      website\n      genres {\n        _id\n        name\n      }\n    }\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n    image\n    tracks {\n      _id\n      title\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{albumId}}\",\n  \"bands\": [\n    \"{{bandId}}\"\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateAlbum w Artist",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateAlbum($id: ID!, $artists: [ID]) {\n  updateAlbum(id: $id, artistsIds: $artists) {\n    _id\n    name\n    artists {\n      _id\n      firstName\n    }\n    image\n    bands {\n      _id\n      name\n    }\n    tracks {\n      _id\n      title\n    }\n    genres {\n      _id\n      name\n    }\n    released\n  }\n}",
+								"variables": "{\n  \"id\": \"{{albumId}}\",\n  \"artists\": [\n    \"{{artistId}}\"\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateAlbum w Track",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateAlbum($id: ID!, $tracks: [ID], ) {\n  updateAlbum(id: $id, trackIds: $tracks) {\n    _id\n    name\n    released\n    artists {\n      _id\n      firstName\n      secondName\n      country\n      instruments\n    }\n    bands {\n      _id\n      name\n      origin\n      members {\n        _id\n        firstName\n        secondName\n        middleName\n        instrument\n        years\n      }\n      website\n      genres {\n        _id\n        name\n      }\n    }\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n    image\n    tracks {\n      _id\n      title\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{albumId}}\",\n  \"tracks\": [\n    \"{{trackId}}\"\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateAlbum w all deps",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment imge url",
+									"const imageUrlArray = (pm.variables.get('imageUrl') || 'imgae url 1').split(\" \");",
+									"",
+									"const imgUrlcount = imageUrlArray.pop();",
+									"",
+									"pm.environment.set(\"imageUrl\", `${imageUrlArray.join(\" \")} ${+imgUrlcount + 1}`)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateAlbum($id: ID!, $name: String, $released: Int, $artists: [ID], $bands: [ID], $tracks: [ID], $genres: [ID], $image: String) {\n  updateAlbum(id: $id, name: $name, released: $released, artistsIds: $artists, bandsIds: $bands, trackIds: $tracks, genresIds: $genres, image: $image) {\n    _id\n    name\n    released\n    artists {\n      _id\n      firstName\n      secondName\n      country\n      instruments\n    }\n    bands {\n      _id\n      name\n      origin\n      members {\n        _id\n        firstName\n        secondName\n        middleName\n        instrument\n        years\n      }\n      website\n      genres {\n        _id\n        name\n      }\n    }\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n    image\n    tracks {\n      _id\n      title\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{albumId}}\",\n  \"name\": \"{{albumName}}\",\n  \"released\": {{release}},\n  \"artists\": [\n    \"{{artistId}}\"\n  ],\n  \"bands\": [\n    \"{{bandId}}\"\n  ],\n  \"tracks\": [\n    \"{{trackId}}\"\n  ],\n  \"genres\": [\n    \"{{genreId}}\"\n  ],\n  \"image\": \"{{imageUrl}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAlbum",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation deleteAlbum ($_id: ID!) {\n    deleteAlbum (id: $_id) {\n        acknowledged\n        deletedCount\n    }\n}",
+								"variables": "{\n  \"_id\": \"{{albumId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tracks",
+			"item": [
+				{
+					"name": "tracks",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Query($limit: Int, $offset: Int) {\n  tracks(limit: $limit, offset: $offset) {\n    items {\n      _id\n      title\n      album {\n        _id\n        name\n        artists {\n          _id\n          firstName\n          instruments\n        }\n        bands {\n          _id\n          name\n          website\n          genres {\n            _id\n            name\n            year\n          }\n          origin\n          members {\n            _id\n            firstName\n            secondName\n            middleName\n            instrument\n            years\n          }\n        }\n        released\n        tracks {\n          _id\n          title\n          album {\n            _id\n            name\n            released\n          }\n          artists {\n            _id\n            firstName\n            secondName\n            middleName\n            birthDate\n            birthPlace\n            country\n            instruments\n          }\n          bands {\n            _id\n            name\n            website\n          }\n          released\n          genres {\n            _id\n            name\n            description\n            country\n            year\n          }\n        }\n      }\n    }\n    limit\n    offset\n    total\n  }\n}",
+								"variables": "{\n  \"limit\": 20,\n  \"offset\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "track",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query track ($id: ID!) {\n    track (id: $id) {\n        _id\n        title\n        album {\n            _id\n            name\n            released\n            artists {\n                _id\n                firstName\n                secondName\n                middleName\n                birthDate\n                birthPlace\n                country\n                bands {\n                    _id\n                    name\n                    origin\n                    members {\n                        artist\n                        instrument\n                        years\n                    }\n                    website\n                    genres {\n                        _id\n                        name\n                        description\n                        country\n                        year\n                    }\n                }\n                instruments\n            }\n            bands {\n                _id\n                name\n                origin\n                members {\n                    artist\n                    instrument\n                    years\n                }\n                website\n                genres {\n                    _id\n                    name\n                    description\n                    country\n                    year\n                }\n            }\n            tracks {\n                _id\n                title\n                albums {\n                    _id\n                    name\n                    released\n                    artists {\n                        _id\n                        firstName\n                        secondName\n                        middleName\n                        birthDate\n                        birthPlace\n                        country\n                        instruments\n                    }\n                    bands {\n                        _id\n                        name\n                        origin\n                        website\n                    }\n                    genres {\n                        _id\n                        name\n                        description\n                        country\n                        year\n                    }\n                    image\n                }\n                bands {\n                    _id\n                    name\n                    origin\n                    members {\n                        artist\n                        instrument\n                        years\n                    }\n                    website\n                    genres {\n                        _id\n                        name\n                        description\n                        country\n                        year\n                    }\n                }\n                duration\n                released\n                genres {\n                    _id\n                    name\n                    description\n                    country\n                    year\n                }\n            }\n            genres {\n                _id\n                name\n                description\n                country\n                year\n            }\n            image\n        }\n        bands {\n            _id\n            name\n            origin\n            members {\n                artist\n                instrument\n                years\n            }\n            website\n            genres {\n                _id\n                name\n                description\n                country\n                year\n            }\n        }\n        duration\n        released\n        genres {\n            _id\n            name\n            description\n            country\n            year\n        }\n    }\n}",
+								"variables": "{\n  \"id\": \"{{trackId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createTrack",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Set  ID from response to variable",
+									"const jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"trackId\", jsonData.data.createTrack._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment  name",
+									"const trackNameArray = (pm.variables.get('trackName') || 'Track title 1').split(\" \");",
+									"",
+									"const count = trackNameArray.pop();",
+									"",
+									"pm.environment.set(\"trackName\", `${trackNameArray.join(\" \")} ${+count + 1}`)",
+									"",
+									"//Increment duration",
+									"const duration = pm.variables.get('duration') || 180;",
+									"",
+									"pm.environment.set(\"duration\", duration + 1)",
+									"",
+									"//Increment reslease",
+									"const release = pm.variables.get('release') || 1976;",
+									"",
+									"pm.environment.set(\"release\", release + 1)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateTrack($title: String!, $released: Int, $duration: Int) {\n  createTrack(title: $title, released: $released, duration: $duration) {\n    _id\n    title\n    duration\n    released\n  }\n}",
+								"variables": "{\n  \"title\": \"{{trackName}}\",\n  \"duration\": {{duration}},\n  \"released\": {{release}}\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createTrack w Genre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Set  ID from response to variable",
+									"const jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"trackId\", jsonData.data.createTrack._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment  name",
+									"const trackNameArray = (pm.variables.get('trackName') || 'Track title 1').split(\" \");",
+									"",
+									"const count = trackNameArray.pop();",
+									"",
+									"pm.environment.set(\"trackName\", `${trackNameArray.join(\" \")} ${+count + 1}`)",
+									"",
+									"//Increment duration",
+									"const duration = pm.variables.get('duration') || 180;",
+									"",
+									"pm.environment.set(\"duration\", duration + 1)",
+									"",
+									"//Increment reslease",
+									"const release = pm.variables.get('release') || 1976;",
+									"",
+									"pm.environment.set(\"release\", release + 1)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($title: String!, $duration: Int, $released: Int, $genresIds: [ID]) {\n  createTrack(title: $title, duration: $duration, released: $released, genresIds: $genresIds) {\n    _id\n    title\n    album {\n      _id\n      name\n      released\n      image\n    }\n    artists {\n      _id\n      firstName\n      secondName\n      middleName\n      birthDate\n      birthPlace\n      country\n      instruments\n    }\n    bands {\n      _id\n      name\n      origin\n      website\n    }\n    duration\n    released\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n  }\n}",
+								"variables": "{\n  \"title\": \"{{trackName}}\",\n  \"duration\": {{duration}},\n  \"released\": {{release}},\n  \"genresIds\": [\n    \"{{genreId}}\"\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createTrack w Artist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Set  ID from response to variable",
+									"const jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"trackId\", jsonData.data.createTrack._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment  name",
+									"const trackNameArray = (pm.variables.get('trackName') || 'Track title 1').split(\" \");",
+									"",
+									"const count = trackNameArray.pop();",
+									"",
+									"pm.environment.set(\"trackName\", `${trackNameArray.join(\" \")} ${+count + 1}`)",
+									"",
+									"//Increment duration",
+									"const duration = pm.variables.get('duration') || 180;",
+									"",
+									"pm.environment.set(\"duration\", duration + 1)",
+									"",
+									"//Increment reslease",
+									"const release = pm.variables.get('release') || 1976;",
+									"",
+									"pm.environment.set(\"release\", release + 1)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($title: String!, $artistsIds: [ID], $duration: Int, $released: Int) {\n  createTrack(title: $title, artistsIds: $artistsIds, duration: $duration, released: $released) {\n    _id\n    title\n    album {\n      _id\n      name\n      released\n      image\n    }\n    artists {\n      _id\n      firstName\n      secondName\n      middleName\n      birthDate\n      birthPlace\n      country\n      instruments\n    }\n    bands {\n      _id\n      name\n      origin\n      website\n    }\n    duration\n    released\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n  }\n}",
+								"variables": "{\n  \"title\": \"{{trackName}}\",\n  \"artistsIds\": [\n    \"{{artistId}}\"\n  ],\n  \"duration\": {{duration}},\n  \"released\": {{release}}\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createTrack w Album",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Set  ID from response to variable",
+									"const jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"trackId\", jsonData.data.createTrack._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment  name",
+									"const trackNameArray = (pm.variables.get('trackName') || 'Track title 1').split(\" \");",
+									"",
+									"const count = trackNameArray.pop();",
+									"",
+									"pm.environment.set(\"trackName\", `${trackNameArray.join(\" \")} ${+count + 1}`)",
+									"",
+									"//Increment duration",
+									"const duration = pm.variables.get('duration') || 180;",
+									"",
+									"pm.environment.set(\"duration\", duration + 1)",
+									"",
+									"//Increment reslease",
+									"const release = pm.variables.get('release') || 1976;",
+									"",
+									"pm.environment.set(\"release\", release + 1)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateTrack($title: String!, $released: Int, $duration: Int, $albumId: ID) {\n  createTrack(title: $title, released: $released, duration: $duration, albumId: $albumId) {\n    _id\n    title\n    duration\n    released\n    album {\n      _id\n      name\n      released\n      artists {\n        _id\n        firstName\n      }\n      bands {\n        _id\n        name\n      }\n      genres {\n        _id\n        name\n      }\n      image\n    }\n  }\n}",
+								"variables": "{\n  \"title\": \"{{trackName}}\",\n  \"albumId\": \"{{albumId}}\",\n  \"duration\": {{duration}},\n  \"released\": {{release}}\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createTrack w all deps",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Set  ID from response to variable",
+									"const jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"trackId\", jsonData.data.createTrack._id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Increment  name",
+									"const trackNameArray = (pm.variables.get('trackName') || 'Track title 1').split(\" \");",
+									"",
+									"const count = trackNameArray.pop();",
+									"",
+									"pm.environment.set(\"trackName\", `${trackNameArray.join(\" \")} ${+count + 1}`)",
+									"",
+									"//Increment duration",
+									"const duration = pm.variables.get('duration') || 180;",
+									"",
+									"pm.environment.set(\"duration\", duration + 1)",
+									"",
+									"//Increment reslease",
+									"const release = pm.variables.get('release') || 1976;",
+									"",
+									"pm.environment.set(\"release\", release + 1)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($title: String!, $album: ID, $artistsIds: [ID], $bandsIds: [ID], $duration: Int, $released: Int, $genresIds: [ID]) {\n  createTrack(title: $title, albumId: $album, artistsIds: $artistsIds, bandsIds: $bandsIds, duration: $duration, released: $released, genresIds: $genresIds) {\n    _id\n    title\n    album {\n      _id\n      name\n      released\n      image\n    }\n    artists {\n      _id\n      firstName\n      secondName\n      middleName\n      birthDate\n      birthPlace\n      country\n      instruments\n    }\n    bands {\n      _id\n      name\n      origin\n      website\n    }\n    duration\n    released\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n  }\n}",
+								"variables": "{\n  \"title\": \"{{trackName}}\",\n  \"album\": \"{{albumId}}\",\n  \"bandsIds\": [\n    \"{{bandId}}\"\n  ],\n  \"artistsIds\": [\n    \"{{artistId}}\"\n  ],\n  \"duration\": {{duration}},\n  \"released\": {{release}},\n  \"genresIds\": [\n    \"{{genreId}}\"\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTrack w Artist",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($id: ID!, $artistsIds: [ID]) {\n  updateTrack(id: $id, artistsIds: $artistsIds) {\n    _id\n    title\n    album {\n      _id\n      name\n      released\n      image\n    }\n    artists {\n      _id\n      firstName\n      secondName\n      instruments\n      country\n    }\n    bands {\n      _id\n      name\n      website\n      origin\n    }\n    duration\n    released\n    genres {\n      _id\n      name\n      country\n      year\n      description\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{trackId}}\",\n  \"artistsIds\": [\n    \"{{artistId}}\"\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTrack w Genre",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($id: ID!, $genresIds: [ID]) {\n  updateTrack(id: $id, genresIds: $genresIds) {\n    _id\n    title\n    album {\n      _id\n      name\n      released\n      image\n    }\n    artists {\n      _id\n      firstName\n      secondName\n      instruments\n      country\n    }\n    bands {\n      _id\n      name\n      website\n      origin\n    }\n    duration\n    released\n    genres {\n      _id\n      name\n      country\n      year\n      description\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{trackId}}\",\n  \"genresIds\": [\n    \"{{genreId}}\"\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTrack w Band",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($id: ID!,$bandsIds: [ID]) {\n  updateTrack(id: $id, bandsIds: $bandsIds) {\n    _id\n    title\n    album {\n      _id\n      name\n      released\n      image\n    }\n    artists {\n      _id\n      firstName\n      secondName\n      instruments\n      country\n    }\n    bands {\n      _id\n      name\n      website\n      origin\n    }\n    duration\n    released\n    genres {\n      _id\n      name\n      country\n      year\n      description\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{trackId}}\",\n  \"bandsIds\": [\n    \"{{bandId}}\"\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTrack w Album",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($id: ID!, $albumId: ID) {\n  updateTrack(id: $id, albumId: $albumId) {\n    _id\n    title\n    album {\n      _id\n      name\n      released\n      image\n    }\n    artists {\n      _id\n      firstName\n      secondName\n      middleName\n      birthDate\n      birthPlace\n      country\n      instruments\n    }\n    bands {\n      _id\n      name\n      origin\n      members {\n        _id\n        firstName\n        years\n        instrument\n        middleName\n        secondName\n      }\n      website\n      genres {\n        _id\n        name\n        description\n        year\n        country\n      }\n    }\n    duration\n    released\n    genres {\n      _id\n      name\n      description\n      year\n      country\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{trackId}}\",\n  \"albumId\": \"{{albumId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTrack w all deps",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($id: ID!, $albumId: ID, $artistsIds: [ID], $bandsIds: [ID], $genresIds: [ID]) {\n  updateTrack(id: $id, albumId: $albumId, artistsIds: $artistsIds, bandsIds: $bandsIds, genresIds: $genresIds) {\n    _id\n    title\n    album {\n      _id\n      name\n      released\n      image\n    }\n    artists {\n      _id\n      firstName\n      secondName\n      instruments\n      country\n    }\n    bands {\n      _id\n      name\n      website\n      origin\n    }\n    duration\n    released\n    genres {\n      _id\n      name\n      country\n      year\n      description\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{trackId}}\",\n  \"albumId\": \"{{albumId}}\",\n  \"bandsIds\": [\n    \"{{bandId}}\"\n  ],\n  \"artistsIds\": [\n    \"{{artistId}}\"\n  ],\n  \"genresIds\": [\n    \"{{genreId}}\"\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteTrack",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation deleteTrack ($_id: ID!) {\n    deleteTrack (_id: $_id) {\n        acknowledged\n        deletedCount\n    }\n}",
+								"variables": "{\n  \"_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Favourites",
+			"item": [
+				{
+					"name": "favourites",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Query($limit: Int, $offset: Int) {\n  favourites(limit: $limit, offset: $offset) {\n    _id\n    userId\n    bands {\n      _id\n      name\n      origin\n      website\n    }\n    genres {\n      _id\n      name\n      country\n      description\n      year\n    }\n    artists {\n      _id\n      firstName\n      secondName\n      birthPlace\n      country\n      instruments\n    }\n    tracks {\n      _id\n      title\n      duration\n      released\n    }\n  }\n}",
+								"variables": "{\n  \"limit\": 30,\n  \"offset\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addTrackToFavourites",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($tracksId: ID!) {\n  addTrackToFavourites(tracksId: $tracksId) {\n    _id\n    userId\n    bands {\n      _id\n      name\n      origin\n      website\n    }\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n    artists {\n      _id\n      firstName\n      instruments\n      secondName\n    }\n    tracks {\n      _id\n      title\n      duration\n      released\n    }\n  }\n}",
+								"variables": "{\n  \"tracksId\": \"{{trackId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addBandToFavourites",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addBandToFavourites ($bandsId: ID!) {\n    addBandToFavourites (bandsId: $bandsId) {\n        _id\n        userId\n        bands {\n            _id\n            name\n            origin\n            website\n            genres {\n                _id\n                name\n                description\n                country\n                year\n            }\n        }\n    }\n}",
+								"variables": "{\n  \"bandsId\": \"{{bandId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addArtistToFavourites",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($artistsId: ID!) {\n  addArtistToFavourites(artistsId: $artistsId) {\n    _id\n    userId\n    bands {\n      _id\n      name\n      origin\n      website\n    }\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n    artists {\n      _id\n      firstName\n      secondName\n      middleName\n      birthDate\n      birthPlace\n      country\n      bands {\n        name\n        origin\n        website\n      }\n      instruments\n    }\n    tracks {\n      _id\n      title\n      duration\n      released\n    }\n  }\n}",
+								"variables": "{\n  \"artistsId\": \"{{artistId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addGenreToFavourites",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($genresId: ID!) {\n  addGenreToFavourites(genresId: $genresId) {\n    _id\n    userId\n    bands {\n      _id\n      name\n      origin\n      website\n    }\n    genres {\n      _id\n      name\n      description\n      country\n      year\n    }\n    artists {\n      _id\n      firstName\n      secondName\n      middleName\n      birthDate\n      birthPlace\n      country\n      instruments\n    }\n    tracks {\n      _id\n      title\n      duration\n      released\n    }\n  }\n}",
+								"variables": "{\n  \"genresId\": \"{{genreId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
