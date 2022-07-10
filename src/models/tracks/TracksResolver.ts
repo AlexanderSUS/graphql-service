@@ -24,6 +24,8 @@ const tracksResolver: Resolvers = {
     },
 
     async album(track: Track, args: any, { dataSources }) {
+      if (!track.albumId) return null;
+
       const album = await dataSources.albumsAPI.getAlbum(track.albumId);
 
       return album || null;
