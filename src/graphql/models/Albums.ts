@@ -30,8 +30,8 @@ const typeDefs = gql`
   }
 
  type Mutation {
-    createAlbum(name: String, released: Int, artists: [ID], bands: [ID], tracks: [ID], genres: [ID], image: String): Album
-    updateAlbum(id: ID!, name: String, released: Int, artists: [ID], bands: [ID], tracks: [ID], genres: [ID], image: String): Album
+    createAlbum(name: String, released: Int, artistsIds: [ID], bandsIds: [ID], trackIds: [ID], genresIds: [ID], image: String): Album
+    updateAlbum(id: ID!, name: String, released: Int, artistsIds: [ID], bandsIds: [ID], trackIds: [ID], genresIds: [ID], image: String): Album
     deleteAlbum(id: ID!): DeleteAlbumReturnObject
   }
 `;
